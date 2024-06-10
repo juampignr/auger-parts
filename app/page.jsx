@@ -4,42 +4,135 @@ import { Image } from "@nextui-org/image";
 import { Select, SelectItem } from "@nextui-org/select";
 import { useState,useEffect } from "react"
 import { useAsyncEffect } from "use-async-effect"
+import chalk  from "chalk"
 import augerLogo from "/images/logo.jpg"
+
+let show = (arg) => {
+
+  switch(typeof arg){
+
+      case "string":
+
+          console.log(chalk.inverse(arg))
+          break
+
+      case "object":
+
+          console.log(arg)
+          break
+      
+      case "function":
+
+          console.log(arg)
+          break
+      
+      default:
+
+          console.log(chalk.bold(arg))
+          break
+  }
+
+}
+
+let debug = (arg) => {
+
+  switch(typeof arg){
+
+      case "string":
+
+          console.log(chalk.red.underline(arg))
+          break
+
+      case "object":
+
+          console.log(arg)
+          break
+
+      case "function":
+
+          console.log(arg)
+          break
+      
+      default:
+
+          console.log(chalk.red.underline(arg))
+          break
+  }
+
+}
+
+let warn = (arg) => {
+
+  switch(typeof arg){
+
+      case "string":
+
+          console.log(chalk.bgRed.inverse(arg))
+          break
+
+      case "object":
+
+          console.log(arg)
+          break
+      
+      case "function":
+
+          console.log(arg)
+          break
+
+      default:
+
+          console.log(chalk.bgRed(arg))
+          break
+  }
+
+}
+
 
 export default function Home() {
 
+  const [parts, setParts] = useState([])
+  const [selectedPart, setSelectedPart] = useState(false)
 
-  const { setParts,parts } = useState([])
+  useAsyncEffect(async ()=>{
 
-  useEffect(()=>{
+    let parts = await fetch("http://127.0.0.1:3000/api/parts/")
+    parts = (await parts.json()).data
 
-    setParts([{"value":"1","text":"one"},{"value":"2","text":"two"}])
+    setParts(parts.map((element)=>{ return {"key":element,"label":element}}))
   },[])
 
+  useAsyncEffect(async ()=>{
+
+    console.log(selectedPart)
+
+  },[selectedPart])
+
+  function handleSelection(change){
+    
+    show(Array.from(change)[0])
+  }
+
   return (
-    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="inline-block max-w-lg text-center justify-center">
+    <div className="w-full flex flex-col gap-4 items-center mt-6">
+      <div className="max-w-lg text-center justify-center">
       <Image
-      width={150}
+      width={120}
       alt="Auger Logo"
       src={augerLogo.src}
       style={{marginTop:"-5rem"}}
       />
-
-      <Select 
-        label="Select smth" 
-        className="max-w-xs" 
-      >
-
-        {
-          parts?.map(element => {
-            <SelectItem key={element?.value}>{element?.text}</SelectItem>
-          })
-        }
-         
-      </Select>
-
       </div>
-    </section>
+
+      <Select
+        items={parts}
+        label="Partes"
+        placeholder="Qué componente o parte desea agregar?"
+        className="max-w-lg"
+        onSelectionChange={handleSelection}
+      >
+        {(parts) => <SelectItem>{parts.label}</SelectItem>}
+      </Select>
+    </div>
   );
 }
