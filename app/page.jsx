@@ -2,13 +2,19 @@
 
 import { Image } from "@nextui-org/image"
 import { Select, SelectItem } from "@nextui-org/select"
+import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
 import { Input } from "@nextui-org/input"
 import { Divider } from "@nextui-org/divider"
-import { useState,useEffect } from "react"
+import { useState,useRef,useEffect } from "react"
 import { useAsyncEffect } from "use-async-effect"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { randomBytes } from "crypto"
+import { SearchInput } from "/components/SearchInput"
+import { AutoInput } from "/components/AutoInput"
+
+import { fieldRegex } from "/json/fieldRegex.js"
+
 import chalk  from "chalk"
 import augerLogo from "/images/logo.jpg"
 
@@ -103,6 +109,9 @@ export default function Home() {
   const [rows, setRows] = useState([])
   const [rowsCounter, setRowsCounter] = useState(0)
 
+  const valuesObject = useRef({})
+  const parentRef = useRef(false)
+
   function handleAddPart(event){
 
     setRowsCounter(element=> element+1)
@@ -111,35 +120,31 @@ export default function Home() {
 
   async function handleSelection(event){
 
-    console.log(event.target.value)
-
     const field = event.target.value
     
     let parts = await fetch(`http://127.0.0.1:3000/api/associated/${field}`)
     parts = (await parts.json())?.data 
-
-    console.log(parts)
   }
 
   function populateFields(metadata){
 
     const jsx = metadata?.map((element)=>{
 
+      const regex = fieldRegex[element.data_type?.toUpperCase()]
+      let isRequired = false
+
       if(!["Avail","inTime","UserID","ID"].includes(element.column_name)){
 
         if(element.associated_table){
 
-          return <div className="lg:w-1/6 md:w-1/4 sm:w-1/2 animate__animated animate__fadeInDown">
-                  <Select row={rowsCounter} itemID={randomBytes(3).toString("hex")} items={[{key:`${element.column_name}`,label:`${element.column_name}`}]} label={element.column_name} onChange={handleSelection} placeholder="Seleccione"> 
-                    {
-                    (items) => <SelectItem>{`Buscar ${items.label}`}</SelectItem>
-                    }
-                  </Select>
-                </div>
-
+          return <SearchInput row={rowsCounter} nFields={metadata.length-4} values={valuesObject} label={`${element.column_name}`}/>
+                  
         }
 
-        return <div row={rowsCounter} itemID={randomBytes(3).toString("hex")} className="lg:w-1/6 md:w-1/4 sm:w-1/2 animate__animated animate__fadeInDown"><Input type="text" label={`${element.column_name}`} /></div>
+        if(element.column_name === "Name")
+          isRequired = true
+
+        return <AutoInput row={rowsCounter} nFields={metadata.length-4} values={valuesObject} label={element.column_name} required={isRequired} regex={regex}/>
 
       }
     })
@@ -178,10 +183,12 @@ export default function Home() {
       
       metadata = (await metadata.json())?.data
       
+      valuesObject.current = {}
       setRowsCounter(0)
       setRawFields(metadata)
       setFields([])
 
+      setRowsCounter(element=> element+1)
       populateFields(metadata)
     }
 
@@ -209,7 +216,7 @@ export default function Home() {
           {(parts) => <SelectItem>{parts.label}</SelectItem>}
         </Select>
 
-        <FontAwesomeIcon icon={faPlus} className="text-3xl hover:animate-pulse" onClick={handleAddPart}/>      
+        <FontAwesomeIcon icon={faPlus} className="text-3xl hover:animate-ping" onClick={handleAddPart}/>      
       </div>
 
       <div className="flex flex-row flex-wrap gap-2">

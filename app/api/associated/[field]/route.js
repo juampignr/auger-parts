@@ -22,6 +22,8 @@ export async function GET(request,{ params }) {
 
         }
 
+        await connection.end()
+
         return Response.json({"status":"ok",data:fields})
 
     } catch (error) {

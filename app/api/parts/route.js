@@ -21,6 +21,8 @@ export async function GET(request,response) {
             return element.Name
         })
         
+        await connection.end()
+
         return Response.json({"status":"ok","data":parts})
 
     } catch (error) {
