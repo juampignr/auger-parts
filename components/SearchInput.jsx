@@ -1,21 +1,30 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
+import { Context } from "/app/page"
 import useAsyncEffect from 'use-async-effect'
 
-export const SearchInput = ({row,values,label,nFields}) => {
+export const SearchInput = ({label,nFields}) => {
   
+    const ctx = useContext(Context)
+
     const [items, setItems] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [value, setValue] = useState(false)
     const [fieldColor, setFieldColor] = useState("default")
-
-    const rowsValues = values 
-
+    
     const field = useRef(label ?? "")
-    const fieldRow = row
+    const fieldTable = useRef(ctx.table ?? "")
+    const timeoutID = useRef(0)
+    
+    const fieldRow = ctx.row
     const fieldsNumber = nFields
+
+    useEffect(()=>{
+
+        ctx.valuesObject[fieldRow] = {}
+    },[])
 
     useAsyncEffect(async ()=>{
 
@@ -23,6 +32,9 @@ export const SearchInput = ({row,values,label,nFields}) => {
 
             let parts = await fetch(`http://127.0.0.1:3000/api/associated/${field.current}`)
             parts = (await parts.json())?.data 
+
+            console.log("### ASSOCIATIVE DATA ###")
+            console.log(parts)
 
             for (const part of parts) {
                 setItems((prevItems) => [...prevItems,{label:part.Name,key:part.ID}])
@@ -41,18 +53,39 @@ export const SearchInput = ({row,values,label,nFields}) => {
             label={field.current}
             placeholder={field.current}
             onOpenChange={(state,action) => !isOpen ? setIsOpen(true) : isOpen}
-            onInputChange={(value) => { 
+            onSelectionChange={(key) => { 
                 
-                if(!rowsValues.current[fieldRow])
-                    rowsValues.current[fieldRow] = {}
+                let rowsValues = ctx.valuesObject[fieldRow]
+                
+                rowsValues[field.current] = key
 
-                rowsValues.current[fieldRow][field.current] = value
+                console.log(ctx)
 
-                if(Object.values(rowsValues.current[fieldRow]).length === fieldsNumber){
+                if(Object.values(rowsValues).length === fieldsNumber){
 
-                    setTimeout(()=>{
-                        setFieldColor("success")
-                        field.current = "Listo!"
+                    clearTimeout(timeoutID.current)
+                    
+                    timeoutID.current = setTimeout(async ()=>{
+                      
+                        const formData = new FormData()
+                          
+                          for (const key in rowsValues) {
+                              if (Object.hasOwnProperty.call(rowsValues, key)) {
+                                  
+                                formData.append(`${key}:${typeof rowsValues[key]}`, rowsValues[key])
+                              }
+                          }
+                        
+                        //Make Miguel responsible for all muahahaha
+                        formData.append("UserID", 39)
+
+                        const postResult = await fetch(`http://127.0.0.1:3000/api/table/${fieldTable.current}`,{
+                            method: 'POST',
+                            body: formData,
+                        })
+
+                      setFieldColor("success")
+                      setFieldLabel("Parte ingresada!")
                     },10000)
                 }
             }}

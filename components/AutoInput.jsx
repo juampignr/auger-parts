@@ -1,15 +1,25 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { Input } from "@nextui-org/input"
+import { Context } from "/app/page"
 
-export const AutoInput = ({row,values,label,required,regex,nFields}) => {
 
-    const fieldRow = row
+export const AutoInput = ({label,required,regex,nFields}) => {
+
+    const ctx = useContext(Context)
+
+    const fieldRow = ctx.row
     const fieldRegex = regex ?? /\w.*/i
     const fieldsNumber = nFields
 
-    const rowsValues = values
+    const fieldTable = useRef(ctx.table)
+    const timeoutID = useRef(0)
+
+    useEffect(()=>{
+
+        ctx.valuesObject[fieldRow] = {}
+    },[])
 
     const isRequired = label === "Name" || required ? true : false
     
@@ -27,22 +37,42 @@ export const AutoInput = ({row,values,label,required,regex,nFields}) => {
               label={`${fieldLabel}`} 
               onChange={(event) => {
 
+                console.log(`Testing ${event.target.value} against ${regex}`)
                 if(!fieldRegex.test(event.target.value)){
 
                   setIsInvalid(true)               
                 }else{
 
-                  if(!rowsValues.current[fieldRow])
-                    rowsValues.current[fieldRow] = {}
+                  let rowsValues = ctx.valuesObject[fieldRow]
 
-                  rowsValues.current[fieldRow][fieldLabel] = event.target.value
-                  console.log(Object.values(rowsValues.current[fieldRow]).length) 
-                  
-                  console.log(`Filled ${Object.values(rowsValues.current[fieldRow]).length} of ${fieldsNumber}`)
+                  rowsValues[fieldLabel] = event.target.value                  
 
-                  if(Object.values(rowsValues.current[fieldRow]).length === fieldsNumber){
+                  console.log(ctx)
 
-                    setTimeout(()=>{
+                  console.log(`Filled ${Object.values(rowsValues).length} out of ${fieldsNumber})`)
+                  if(Object.values(rowsValues).length === fieldsNumber){
+
+                    clearTimeout(timeoutID.current)
+
+                    timeoutID.current = setTimeout(async ()=>{
+                      
+                        const formData = new FormData()
+                          
+                          for (const key in rowsValues) {
+                              if (Object.hasOwnProperty.call(rowsValues, key)) {
+                                  
+                                formData.append(`${key}:${typeof rowsValues[key]}`, rowsValues[key])
+                              }
+                          }
+                        
+                        //Make Miguel responsible for all muahahaha
+                        formData.append("UserID", 39)
+
+                        const postResult = await fetch(`http://127.0.0.1:3000/api/table/${fieldTable.current}`,{
+                            method: 'POST',
+                            body: formData,
+                        })
+
                       setFieldColor("success")
                       setFieldLabel("Parte ingresada!")
                     },10000)

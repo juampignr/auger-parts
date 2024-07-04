@@ -5,15 +5,22 @@ import { Select, SelectItem } from "@nextui-org/select"
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
 import { Input } from "@nextui-org/input"
 import { Divider } from "@nextui-org/divider"
-import { useState,useRef,useEffect } from "react"
+import { useState,useRef,useEffect,createContext } from "react"
 import { useAsyncEffect } from "use-async-effect"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { randomBytes } from "crypto"
 import { SearchInput } from "/components/SearchInput"
 import { AutoInput } from "/components/AutoInput"
-
 import { fieldRegex } from "/json/fieldRegex.js"
+
+import { useMemo } from "react";
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+// import { loadAll } from "@tsparticles/all"; // if you are going to use `loadAll`, install the "@tsparticles/all" package too.
+// import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
+import { loadSlim } from "@tsparticles/slim"; // if you are going to use `loadSlim`, install the "@tsparticles/slim" package too.
+// import { loadBasic } from "@tsparticles/basic"; // if you are going to use `loadBasic`, install the "@tsparticles/basic" package too.
+
 
 import chalk  from "chalk"
 import augerLogo from "/images/logo.jpg"
@@ -99,6 +106,7 @@ let warn = (arg) => {
 
 }
 
+export const Context = createContext()
 
 export default function Home() {
 
@@ -109,9 +117,101 @@ export default function Home() {
   const [rows, setRows] = useState([])
   const [rowsCounter, setRowsCounter] = useState(0)
 
-  const valuesObject = useRef({})
+  const [particlesInit, setParticlesInit] = useState(false);
+
   const parentRef = useRef(false)
 
+  const particlesLoaded = (container) => {
+    console.log(container);
+  };
+
+  const particleOptions = useMemo(
+    () => ({
+      background: {
+        color: {
+          value: '#000000', // Background color (black)
+        },
+      },
+      fpsLimit: 60,
+      interactivity: {
+        detectsOn: 'canvas',
+        events: {
+          onClick: {
+            enable: true,
+            mode: 'push',
+          },
+          onHover: {
+            enable: true,
+            mode: 'repulse',
+          },
+          resize: true,
+        },
+        modes: {
+          bubble: {
+            distance: 400,
+            duration: 2,
+            opacity: 0.8,
+            size: 40,
+          },
+          push: {
+            quantity: 4,
+          },
+          repulse: {
+            distance: 100,
+            duration: 0.4,
+          },
+        },
+      },
+      particles: {
+        color: {
+          value: '#ffffff', // Star color (white)
+        },
+        links: {
+          enable: false, // Disable links between particles
+        },
+        move: {
+          direction: 'none',
+          enable: true,
+          outMode: 'out',
+          random: false,
+          speed: 0.2, // Speed of stars
+          straight: false,
+        },
+        number: {
+          density: {
+            enable: true,
+            value_area: 1000, // Increase density to make stars more crowded
+          },
+          value: 150, // Number of stars
+        },
+        opacity: {
+          value: 0.5,
+        },
+        shape: {
+          type: 'circle',
+        },
+        size: {
+          random: true,
+          value: 1,
+        },
+        fixed: {
+          // Fixed positions for stars
+          enable: true,
+          zIndex: -1,
+          particles: [
+            { x: 100, y: 200 },
+            { x: 300, y: 400 },
+            { x: 500, y: 600 },
+            { x: 700, y: 800 },
+            { x: 900, y: 1000 },
+          ],
+        },
+      },
+      detectRetina: true,
+    }),
+    [],
+  );
+  //Particles end here
   function handleAddPart(event){
 
     setRowsCounter(element=> element+1)
@@ -124,29 +224,35 @@ export default function Home() {
     
     let parts = await fetch(`http://127.0.0.1:3000/api/associated/${field}`)
     parts = (await parts.json())?.data 
+
   }
 
   function populateFields(metadata){
 
     const jsx = metadata?.map((element)=>{
 
-      const regex = fieldRegex[element.data_type?.toUpperCase()]
+      const columnTypeRegex = /(?<type>\w+)(?:\((?:(?<minimum>\d+),)?(?<maximum>\d+)\))?/i
+      
+      const {type,minimum,maximum} = columnTypeRegex.exec(element.column_type).groups
+      
+      let regex = fieldRegex[type?.toUpperCase()]
+
+      regex = regex.replace("MINIMUM",minimum ?? 0).replace("MAXIMUM",maximum ?? "")
+
+      regex = new RegExp(regex)
+      
       let isRequired = false
 
-      if(!["Avail","inTime","UserID","ID"].includes(element.column_name)){
+      if(element.associated_table){
 
-        if(element.associated_table){
-
-          return <SearchInput row={rowsCounter} nFields={metadata.length-4} values={valuesObject} label={`${element.column_name}`}/>
-                  
-        }
-
-        if(element.column_name === "Name")
-          isRequired = true
-
-        return <AutoInput row={rowsCounter} nFields={metadata.length-4} values={valuesObject} label={element.column_name} required={isRequired} regex={regex}/>
-
+        return <SearchInput table={selectedPart} row={rowsCounter} nFields={metadata.length} label={`${element.column_name}`}/>
+                
       }
+
+      if(element.column_name === "Name")
+        isRequired = true
+
+      return <AutoInput table={selectedPart} row={rowsCounter} nFields={metadata.length} label={element.column_name} required={isRequired} regex={regex}/>
     })
 
 
@@ -160,7 +266,7 @@ export default function Home() {
 
       setFields(element => {
 
-        return [...element,<Divider className="my-4" />,jsx]
+        return [...element,<Divider className="my-4 z-10" />,jsx]
       
       })
     }    
@@ -171,8 +277,16 @@ export default function Home() {
     let parts = await fetch("http://127.0.0.1:3000/api/parts/")
     parts = (await parts.json())?.data 
 
+    console.log(parts)
     if(parts)
       setParts(parts.map((element)=>{ return {"key":element,"label":element}}))
+
+    initParticlesEngine(async (engine) => {
+
+      await loadSlim(engine)
+    }).then(() => {
+      setParticlesInit(true);
+    })
   },[])
 
   useAsyncEffect(async ()=>{
@@ -181,12 +295,14 @@ export default function Home() {
 
       let metadata = await fetch(`http://127.0.0.1:3000/api/table/${selectedPart}`)
       
+      console.log(metadata)
+
       metadata = (await metadata.json())?.data
       
-      valuesObject.current = {}
+      //valuesObject.current = {}
       setRowsCounter(0)
       setRawFields(metadata)
-      setFields([])
+      //setFields([])
 
       setRowsCounter(element=> element+1)
       populateFields(metadata)
@@ -195,6 +311,13 @@ export default function Home() {
   },[selectedPart])
 
   return (
+    <Context.Provider value={{valuesObject:{},table:selectedPart,row:rowsCounter}}>
+     {particlesInit ? <Particles
+        id="tsparticles"
+        particlesLoaded={particlesLoaded}
+        options={particleOptions}
+      /> : <></>}
+
     <div className="w-full flex flex-col gap-4 items-center mt-6">
       <div className="max-w-lg text-center justify-center">
         <Image
@@ -216,7 +339,7 @@ export default function Home() {
           {(parts) => <SelectItem>{parts.label}</SelectItem>}
         </Select>
 
-        <FontAwesomeIcon icon={faPlus} className="text-3xl hover:animate-ping" onClick={handleAddPart}/>      
+        <FontAwesomeIcon icon={faPlus} className="text-3xl hover:animate-ping z-10" onClick={handleAddPart}/>      
       </div>
 
       <div className="flex flex-row flex-wrap gap-2">
@@ -224,5 +347,6 @@ export default function Home() {
       </div>
 
     </div>
+    </Context.Provider>
   );
 }
