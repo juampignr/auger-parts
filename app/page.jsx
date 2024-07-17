@@ -13,15 +13,9 @@ import { randomBytes } from "crypto"
 import { SearchInput } from "/components/SearchInput"
 import { AutoInput } from "/components/AutoInput"
 import { fieldRegex } from "/json/fieldRegex.js"
-
-import { useMemo } from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-// import { loadAll } from "@tsparticles/all"; // if you are going to use `loadAll`, install the "@tsparticles/all" package too.
-// import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
-import { loadSlim } from "@tsparticles/slim"; // if you are going to use `loadSlim`, install the "@tsparticles/slim" package too.
-// import { loadBasic } from "@tsparticles/basic"; // if you are going to use `loadBasic`, install the "@tsparticles/basic" package too.
-
-
+import { useMemo } from "react"
+import { loadSlim } from "@tsparticles/slim"
+import Particles, { initParticlesEngine } from "@tsparticles/react"
 import chalk  from "chalk"
 import augerLogo from "/images/logo.jpg"
 
@@ -321,7 +315,7 @@ export default function Home() {
     <div className="w-full flex flex-col gap-4 items-center mt-6">
       <div className="max-w-lg text-center justify-center">
         <Image
-        width={120}
+        width={100}
         alt="Auger Logo"
         src={augerLogo.src}
         style={{marginTop:"-5rem"}}
