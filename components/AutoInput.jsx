@@ -68,7 +68,7 @@ export const AutoInput = ({label,required,regex,nFields}) => {
                         //Make Miguel responsible for all muahahaha
                         formData.append("UserID", 39)
 
-                        const postResult = await fetch(`http://168.96.149.39/api/table/${fieldTable.current}`,{
+                        const postResult = await fetch(`http://parts.auger.org.ar/api/table/${fieldTable.current}`,{
                             method: 'POST',
                             body: formData,
                         })

@@ -216,7 +216,7 @@ export default function Home() {
 
     const field = event.target.value
     
-    let parts = await fetch(`http://168.96.149.39/api/associated/${field}`)
+    let parts = await fetch(`http://parts.auger.org.ar/api/associated/${field}`)
     parts = (await parts.json())?.data 
 
   }
@@ -268,7 +268,7 @@ export default function Home() {
 
   useAsyncEffect(async ()=>{
 
-    let parts = await fetch("http://168.96.149.39/api/parts/")
+    let parts = await fetch("http://parts.auger.org.ar/api/parts/")
     parts = (await parts.json())?.data 
 
     console.log(parts)
@@ -287,7 +287,7 @@ export default function Home() {
 
     if(selectedPart){
 
-      let metadata = await fetch(`http://168.96.149.39/api/table/${selectedPart}`)
+      let metadata = await fetch(`http://parts.auger.org.ar/api/table/${selectedPart}`)
       
       console.log(metadata)
 
