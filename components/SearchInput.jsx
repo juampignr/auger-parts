@@ -27,7 +27,7 @@ export const SearchInput = ({ label, nFields }) => {
   useAsyncEffect(async () => {
     if (isOpen) {
       let parts = await fetch(
-        `http://parts.auger.org.ar/api/associated/${field.current}`,
+        `https://parts.auger.org.ar/api/associated/${field.current}`,
       );
       parts = (await parts.json())?.data;
 
@@ -78,7 +78,7 @@ export const SearchInput = ({ label, nFields }) => {
               formData.append("UserID", 39);
 
               const postResult = await fetch(
-                `http://parts.auger.org.ar/api/table/${fieldTable.current}`,
+                `https://parts.auger.org.ar/api/table/${fieldTable.current}`,
                 {
                   method: "POST",
                   body: formData,

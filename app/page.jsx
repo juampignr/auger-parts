@@ -202,7 +202,7 @@ export default function Home() {
     const field = event.target.value;
 
     let parts = await fetch(
-      `http://parts.auger.org.ar/api/associated/${field}`,
+      `https://parts.auger.org.ar/api/associated/${field}`,
     );
     parts = (await parts.json())?.data;
   }
@@ -263,7 +263,7 @@ export default function Home() {
   }
 
   useAsyncEffect(async () => {
-    let parts = await fetch("http://parts.auger.org.ar/api/parts/");
+    let parts = await fetch("https://parts.auger.org.ar/api/parts/");
     parts = (await parts.json())?.data;
 
     console.log(parts);
@@ -284,7 +284,7 @@ export default function Home() {
   useAsyncEffect(async () => {
     if (selectedPart) {
       let metadata = await fetch(
-        `http://parts.auger.org.ar/api/table/${selectedPart}`,
+        `https://parts.auger.org.ar/api/table/${selectedPart}`,
       );
 
       console.log(metadata);
