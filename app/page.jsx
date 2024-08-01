@@ -84,7 +84,7 @@ export default function Home() {
   const ctx = useContext(Context);
 
   let [selectedPart, setSelectedPart] = useState(false);
-  const [rowsCounter, setRowsCounter] = useState(0);
+  let [rowsCounter, setRowsCounter] = useState(0);
 
   setSelectedPart = (part) => {
     setSelectedPart(part);
