@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProviderProps } from "next-themes/dist/types";
 
-export const Context = createContext();
+export const Context = createContext({});
 
 export interface ProvidersProps {
   children: ReactNode;
