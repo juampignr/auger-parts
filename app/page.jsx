@@ -13,7 +13,7 @@ import { randomBytes } from "crypto";
 import { SearchInput } from "/components/SearchInput";
 import { AutoInput } from "/components/AutoInput";
 import { fieldRegex } from "/json/fieldRegex.js";
-import { useMemo } from "react";
+import { useMemo, useContext } from "react";
 import { loadSlim } from "@tsparticles/slim";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { Context } from "/app/providers";
