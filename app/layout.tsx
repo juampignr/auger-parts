@@ -5,10 +5,10 @@ import clsx from "clsx";
 import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import "@fortawesome/fontawesome-svg-core/styles.css"; 
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 
-config.autoAddCss = false
+config.autoAddCss = false;
 
 export const metadata: Metadata = {
   title: {
@@ -36,7 +36,10 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <head>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        />
       </head>
       <body
         className={clsx(

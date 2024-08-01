@@ -1,119 +1,106 @@
-"use client"
+"use client";
 
-import { Image } from "@nextui-org/image"
-import { Select, SelectItem } from "@nextui-org/select"
-import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
-import { Input } from "@nextui-org/input"
-import { Divider } from "@nextui-org/divider"
-import { useState,useRef,useEffect,createContext } from "react"
-import { useAsyncEffect } from "use-async-effect"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
-import { randomBytes } from "crypto"
-import { SearchInput } from "/components/SearchInput"
-import { AutoInput } from "/components/AutoInput"
-import { fieldRegex } from "/json/fieldRegex.js"
-import { useMemo } from "react"
-import { loadSlim } from "@tsparticles/slim"
-import Particles, { initParticlesEngine } from "@tsparticles/react"
-import chalk  from "chalk"
-import augerLogo from "/images/logo.jpg"
+import { Image } from "@nextui-org/image";
+import { Select, SelectItem } from "@nextui-org/select";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
+import { Input } from "@nextui-org/input";
+import { Divider } from "@nextui-org/divider";
+import { useState, useRef, useEffect, createContext } from "react";
+import { useAsyncEffect } from "use-async-effect";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { randomBytes } from "crypto";
+import { SearchInput } from "/components/SearchInput";
+import { AutoInput } from "/components/AutoInput";
+import { fieldRegex } from "/json/fieldRegex.js";
+import { useMemo } from "react";
+import { loadSlim } from "@tsparticles/slim";
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { Context } from "/app/providers";
+import chalk from "chalk";
+import augerLogo from "/images/logo.jpg";
 
 let show = (arg) => {
+  switch (typeof arg) {
+    case "string":
+      console.log(chalk.inverse(arg));
+      break;
 
-  switch(typeof arg){
+    case "object":
+      console.log(arg);
+      break;
 
-      case "string":
+    case "function":
+      console.log(arg);
+      break;
 
-          console.log(chalk.inverse(arg))
-          break
-
-      case "object":
-
-          console.log(arg)
-          break
-      
-      case "function":
-
-          console.log(arg)
-          break
-      
-      default:
-
-          console.log(chalk.bold(arg))
-          break
+    default:
+      console.log(chalk.bold(arg));
+      break;
   }
-
-}
+};
 
 let debug = (arg) => {
+  switch (typeof arg) {
+    case "string":
+      console.log(chalk.red.underline(arg));
+      break;
 
-  switch(typeof arg){
+    case "object":
+      console.log(arg);
+      break;
 
-      case "string":
+    case "function":
+      console.log(arg);
+      break;
 
-          console.log(chalk.red.underline(arg))
-          break
-
-      case "object":
-
-          console.log(arg)
-          break
-
-      case "function":
-
-          console.log(arg)
-          break
-      
-      default:
-
-          console.log(chalk.red.underline(arg))
-          break
+    default:
+      console.log(chalk.red.underline(arg));
+      break;
   }
-
-}
+};
 
 let warn = (arg) => {
+  switch (typeof arg) {
+    case "string":
+      console.log(chalk.bgRed.inverse(arg));
+      break;
 
-  switch(typeof arg){
+    case "object":
+      console.log(arg);
+      break;
 
-      case "string":
+    case "function":
+      console.log(arg);
+      break;
 
-          console.log(chalk.bgRed.inverse(arg))
-          break
-
-      case "object":
-
-          console.log(arg)
-          break
-      
-      case "function":
-
-          console.log(arg)
-          break
-
-      default:
-
-          console.log(chalk.bgRed(arg))
-          break
+    default:
+      console.log(chalk.bgRed(arg));
+      break;
   }
-
-}
-
-export const Context = createContext()
+};
 
 export default function Home() {
+  const ctx = useContext(Context);
 
-  const [parts, setParts] = useState([])
-  const [selectedPart, setSelectedPart] = useState(false)
-  const [rawFields, setRawFields] = useState([])
-  const [fields, setFields] = useState([])
-  const [rows, setRows] = useState([])
-  const [rowsCounter, setRowsCounter] = useState(0)
+  let [selectedPart, setSelectedPart] = useState(false);
+  const [rowsCounter, setRowsCounter] = useState(0);
 
+  setSelectedPart = (part) => {
+    setSelectedPart(part);
+    ctx.table = selectedPart;
+  };
+  setRowsCounter = (counter) => {
+    setRowsCounter(counter);
+    ctx.row = counter;
+  };
+
+  const [parts, setParts] = useState([]);
+  const [rawFields, setRawFields] = useState([]);
+  const [fields, setFields] = useState([]);
+  const [rows, setRows] = useState([]);
   const [particlesInit, setParticlesInit] = useState(false);
-
-  const parentRef = useRef(false)
+  const parentRef = useRef(false);
 
   const particlesLoaded = (container) => {
     console.log(container);
@@ -123,20 +110,20 @@ export default function Home() {
     () => ({
       background: {
         color: {
-          value: '#000000', // Background color (black)
+          value: "#000000", // Background color (black)
         },
       },
       fpsLimit: 60,
       interactivity: {
-        detectsOn: 'canvas',
+        detectsOn: "canvas",
         events: {
           onClick: {
             enable: true,
-            mode: 'push',
+            mode: "push",
           },
           onHover: {
             enable: true,
-            mode: 'repulse',
+            mode: "repulse",
           },
           resize: true,
         },
@@ -158,15 +145,15 @@ export default function Home() {
       },
       particles: {
         color: {
-          value: '#ffffff', // Star color (white)
+          value: "#ffffff", // Star color (white)
         },
         links: {
           enable: false, // Disable links between particles
         },
         move: {
-          direction: 'none',
+          direction: "none",
           enable: true,
-          outMode: 'out',
+          outMode: "out",
           random: false,
           speed: 0.2, // Speed of stars
           straight: false,
@@ -182,7 +169,7 @@ export default function Home() {
           value: 0.5,
         },
         shape: {
-          type: 'circle',
+          type: "circle",
         },
         size: {
           random: true,
@@ -206,141 +193,160 @@ export default function Home() {
     [],
   );
   //Particles end here
-  function handleAddPart(event){
-
-    setRowsCounter(element=> element+1)
-    populateFields(rawFields)
+  function handleAddPart(event) {
+    setRowsCounter((element) => element + 1);
+    populateFields(rawFields);
   }
 
-  async function handleSelection(event){
+  async function handleSelection(event) {
+    const field = event.target.value;
 
-    const field = event.target.value
-    
-    let parts = await fetch(`http://parts.auger.org.ar/api/associated/${field}`)
-    parts = (await parts.json())?.data 
-
+    let parts = await fetch(
+      `http://parts.auger.org.ar/api/associated/${field}`,
+    );
+    parts = (await parts.json())?.data;
   }
 
-  function populateFields(metadata){
+  function populateFields(metadata) {
+    const jsx = metadata?.map((element) => {
+      const columnTypeRegex =
+        /(?<type>\w+)(?:\((?:(?<minimum>\d+),)?(?<maximum>\d+)\))?/i;
 
-    const jsx = metadata?.map((element)=>{
+      const { type, minimum, maximum } = columnTypeRegex.exec(
+        element.column_type,
+      ).groups;
 
-      const columnTypeRegex = /(?<type>\w+)(?:\((?:(?<minimum>\d+),)?(?<maximum>\d+)\))?/i
-      
-      const {type,minimum,maximum} = columnTypeRegex.exec(element.column_type).groups
-      
-      let regex = fieldRegex[type?.toUpperCase()]
+      let regex = fieldRegex[type?.toUpperCase()];
 
-      regex = regex.replace("MINIMUM",minimum ?? 0).replace("MAXIMUM",maximum ?? "")
+      regex = regex
+        .replace("MINIMUM", minimum ?? 0)
+        .replace("MAXIMUM", maximum ?? "");
 
-      regex = new RegExp(regex)
-      
-      let isRequired = false
+      regex = new RegExp(regex);
 
-      if(element.associated_table){
+      let isRequired = false;
 
-        return <SearchInput table={selectedPart} row={rowsCounter} nFields={metadata.length} label={`${element.column_name}`}/>
-                
+      if (element.associated_table) {
+        return (
+          <SearchInput
+            table={selectedPart}
+            row={rowsCounter}
+            nFields={metadata.length}
+            label={`${element.column_name}`}
+          />
+        );
       }
 
-      if(element.column_name === "Name")
-        isRequired = true
+      if (element.column_name === "Name") isRequired = true;
 
-      return <AutoInput table={selectedPart} row={rowsCounter} nFields={metadata.length} label={element.column_name} required={isRequired} regex={regex}/>
-    })
+      return (
+        <AutoInput
+          table={selectedPart}
+          row={rowsCounter}
+          nFields={metadata.length}
+          label={element.column_name}
+          required={isRequired}
+          regex={regex}
+        />
+      );
+    });
 
+    show(jsx);
 
-    show(jsx)
-
-    if(!fields.length){
-
-      setFields(jsx ?? [])
-
-    }else{
-
-      setFields(element => {
-
-        return [...element,<Divider className="my-4 z-10" />,jsx]
-      
-      })
-    }    
+    if (!fields.length) {
+      setFields(jsx ?? []);
+    } else {
+      setFields((element) => {
+        return [...element, <Divider className="my-4 z-10" />, jsx];
+      });
+    }
   }
 
-  useAsyncEffect(async ()=>{
+  useAsyncEffect(async () => {
+    let parts = await fetch("http://parts.auger.org.ar/api/parts/");
+    parts = (await parts.json())?.data;
 
-    let parts = await fetch("http://parts.auger.org.ar/api/parts/")
-    parts = (await parts.json())?.data 
-
-    console.log(parts)
-    if(parts)
-      setParts(parts.map((element)=>{ return {"key":element,"label":element}}))
+    console.log(parts);
+    if (parts)
+      setParts(
+        parts.map((element) => {
+          return { key: element, label: element };
+        }),
+      );
 
     initParticlesEngine(async (engine) => {
-
-      await loadSlim(engine)
+      await loadSlim(engine);
     }).then(() => {
       setParticlesInit(true);
-    })
-  },[])
+    });
+  }, []);
 
-  useAsyncEffect(async ()=>{
+  useAsyncEffect(async () => {
+    if (selectedPart) {
+      let metadata = await fetch(
+        `http://parts.auger.org.ar/api/table/${selectedPart}`,
+      );
 
-    if(selectedPart){
+      console.log(metadata);
 
-      let metadata = await fetch(`http://parts.auger.org.ar/api/table/${selectedPart}`)
-      
-      console.log(metadata)
+      metadata = (await metadata.json())?.data;
 
-      metadata = (await metadata.json())?.data
-      
       //valuesObject.current = {}
-      setRowsCounter(0)
-      setRawFields(metadata)
+      setRowsCounter(0);
+      setRawFields(metadata);
       //setFields([])
 
-      setRowsCounter(element=> element+1)
-      populateFields(metadata)
+      setRowsCounter((element) => element + 1);
+      populateFields(metadata);
     }
-
-  },[selectedPart])
+  }, [selectedPart]);
 
   return (
-    <Context.Provider value={{valuesObject:{},table:selectedPart,row:rowsCounter}}>
-     {particlesInit ? <Particles
-        id="tsparticles"
-        particlesLoaded={particlesLoaded}
-        options={particleOptions}
-      /> : <></>}
-
-    <div className="w-full flex flex-col gap-4 items-center mt-6">
-      <div className="max-w-lg text-center justify-center">
-        <Image
-        width={100}
-        alt="Auger Logo"
-        src={augerLogo.src}
-        style={{marginTop:"-5rem"}}
+    <Context.Provider
+      value={{ valuesObject: {}, table: selectedPart, row: rowsCounter }}
+    >
+      {particlesInit ? (
+        <Particles
+          id="tsparticles"
+          particlesLoaded={particlesLoaded}
+          options={particleOptions}
         />
+      ) : (
+        <></>
+      )}
+
+      <div className="w-full flex flex-col gap-4 items-center mt-6">
+        <div className="max-w-lg text-center justify-center">
+          <Image
+            width={100}
+            alt="Auger Logo"
+            src={augerLogo.src}
+            style={{ marginTop: "-5rem" }}
+          />
+        </div>
+
+        <div className="flex w-full flex-row flex-wrap gap-4 justify-center items-center">
+          <Select
+            items={parts}
+            label="Partes"
+            placeholder="Qué componente o parte desea agregar?"
+            className="max-w-lg"
+            onSelectionChange={(change) => {
+              setSelectedPart(Array.from(change)[0]);
+            }}
+          >
+            {(parts) => <SelectItem>{parts.label}</SelectItem>}
+          </Select>
+
+          <FontAwesomeIcon
+            icon={faPlus}
+            className="text-3xl hover:animate-ping z-10"
+            onClick={handleAddPart}
+          />
+        </div>
+
+        <div className="flex flex-row flex-wrap gap-2">{fields}</div>
       </div>
-
-      <div className="flex w-full flex-row flex-wrap gap-4 justify-center items-center">
-        <Select
-          items={parts}
-          label="Partes"
-          placeholder="Qué componente o parte desea agregar?"
-          className="max-w-lg"
-          onSelectionChange={(change)=>{ setSelectedPart(Array.from(change)[0])}}
-        >
-          {(parts) => <SelectItem>{parts.label}</SelectItem>}
-        </Select>
-
-        <FontAwesomeIcon icon={faPlus} className="text-3xl hover:animate-ping z-10" onClick={handleAddPart}/>      
-      </div>
-
-      <div className="flex flex-row flex-wrap gap-2">
-        {fields}
-      </div>
-
-    </div>
     </Context.Provider>
   );
 }
