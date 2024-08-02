@@ -285,6 +285,8 @@ export default function Home() {
 
       metadata = (await metadata.json())?.data;
 
+      console.log(metadata);
+
       //valuesObject.current = {}
       //setrowCounter(0);
       setRowCounter(0);
