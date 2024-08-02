@@ -327,7 +327,9 @@ export default function Home() {
             className="max-w-lg"
             onSelectionChange={(change) => {
               //setctx.selectedPart(change)
+              show(change);
               ctx.setSelectedPart(Array.from(change)[0]);
+              show(ctx.selectedPart);
             }}
           >
             {(parts) => <SelectItem>{parts.label}</SelectItem>}
