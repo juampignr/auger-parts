@@ -222,7 +222,7 @@ export default function Home() {
         return (
           <SearchInput
             table={selectedPart}
-            row={rowsCounter}
+            row={rowCounter}
             nFields={metadata.length}
             label={`${element.column_name}`}
           />
@@ -234,7 +234,7 @@ export default function Home() {
       return (
         <AutoInput
           table={selectedPart}
-          row={rowsCounter}
+          row={rowCounter}
           nFields={metadata.length}
           label={element.column_name}
           required={isRequired}
@@ -286,7 +286,7 @@ export default function Home() {
       metadata = (await metadata.json())?.data;
 
       //valuesObject.current = {}
-      //setRowsCounter(0);
+      //setrowCounter(0);
       setRowCounter(0);
       ctx.row = 0;
       setRawFields(metadata);
