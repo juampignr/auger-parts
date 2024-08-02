@@ -327,7 +327,7 @@ export default function Home() {
             className="max-w-lg"
             onSelectionChange={(change) => {
               //setctx.selectedPart(change)
-              console.log(change[0]);
+              console.log(Object.values(change));
               ctx.setSelectedPart(Array.from(change)[0]);
             }}
           >
