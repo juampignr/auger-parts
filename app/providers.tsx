@@ -23,10 +23,8 @@ export function Providers({ children, themeProps }: ProvidersProps) {
     <Context.Provider
       value={{
         valuesObject: {},
-        part: selectedPart,
-        setSelectedPart: setSelectedPart,
-        rowCounter: rowCounter,
-        setRowCounter: setRowCounter,
+        table: "",
+        row: 0,
       }}
     >
       <NextUIProvider navigate={router.push}>

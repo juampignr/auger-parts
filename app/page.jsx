@@ -83,8 +83,8 @@ let warn = (arg) => {
 export default function Home() {
   const ctx = useContext(Context);
 
-  //let [selectedPart, setSelectedPart] = useState(false);
-  let [rowsCounter, setRowsCounter] = useState(0);
+  let [selectedPart, setSelectedPart] = useState(false);
+  let [rowCounter, setRowCounter] = useState(0);
 
   const [parts, setParts] = useState([]);
   const [rawFields, setRawFields] = useState([]);
@@ -185,7 +185,8 @@ export default function Home() {
   );
   //Particles end here
   function handleAddPart(event) {
-    ctx.setRowsCounter((element) => element + 1);
+    setRowCounter((element) => element + 1);
+    ctx.row += 1;
     populateFields(rawFields);
   }
 
@@ -220,7 +221,7 @@ export default function Home() {
       if (element.associated_table) {
         return (
           <SearchInput
-            table={ctx.selectedPart}
+            table={selectedPart}
             row={rowsCounter}
             nFields={metadata.length}
             label={`${element.column_name}`}
@@ -232,7 +233,7 @@ export default function Home() {
 
       return (
         <AutoInput
-          table={ctx.selectedPart}
+          table={selectedPart}
           row={rowsCounter}
           nFields={metadata.length}
           label={element.column_name}
@@ -273,11 +274,11 @@ export default function Home() {
   }, []);
 
   useAsyncEffect(async () => {
-    console.log(ctx.selectedPart);
+    console.log(selectedPart);
 
-    if (ctx.selectedPart) {
+    if (selectedPart) {
       let metadata = await fetch(
-        `https://parts.auger.org.ar/api/table/${ctx.selectedPart}`,
+        `https://parts.auger.org.ar/api/table/${selectedPart}`,
       );
 
       console.log(metadata);
@@ -286,18 +287,20 @@ export default function Home() {
 
       //valuesObject.current = {}
       //setRowsCounter(0);
-      ctx.setRowCounter(0);
+      setRowCounter(0);
+      ctx.row = 0;
       setRawFields(metadata);
       //setFields([])
 
-      setRowsCounter((element) => element + 1);
+      setRowCounter((element) => element + 1);
+      ctx.row += 1;
       populateFields(metadata);
     }
-  }, [ctx.selectedPart]);
+  }, [selectedPart]);
 
   return (
     <Context.Provider
-      value={{ valuesObject: {}, table: ctx.selectedPart, row: rowsCounter }}
+      value={{ valuesObject: {}, table: selectedPart, row: rowsCounter }}
     >
       {particlesInit ? (
         <Particles
@@ -327,8 +330,9 @@ export default function Home() {
             className="max-w-lg"
             onSelectionChange={(change) => {
               console.log(Object.values(change)[0]);
-              ctx.setSelectedPart(Object.values(change)[0]);
-              console.log(ctx.selectedPart);
+              setSelectedPart(Object.values(change)[0]);
+              ctx.table = Object.values(change)[0];
+              console.log(selectedPart);
             }}
           >
             {(parts) => <SelectItem>{parts.label}</SelectItem>}
