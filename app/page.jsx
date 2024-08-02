@@ -299,9 +299,7 @@ export default function Home() {
   }, [selectedPart]);
 
   return (
-    <Context.Provider
-      value={{ valuesObject: {}, table: selectedPart, row: rowsCounter }}
-    >
+    <>
       {particlesInit ? (
         <Particles
           id="tsparticles"
@@ -347,6 +345,6 @@ export default function Home() {
 
         <div className="flex flex-row flex-wrap gap-2">{fields}</div>
       </div>
-    </Context.Provider>
+    </>
   );
 }
