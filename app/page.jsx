@@ -83,7 +83,7 @@ let warn = (arg) => {
 export default function Home() {
   const ctx = useContext(Context);
 
-  let [selectedPart, setSelectedPart] = useState(false);
+  let [ctx.table, setctx.table] = useState(false);
   let [rowsCounter, setRowsCounter] = useState(0);
 
   const [parts, setParts] = useState([]);
@@ -221,7 +221,7 @@ export default function Home() {
       if (element.associated_table) {
         return (
           <SearchInput
-            table={selectedPart}
+            table={ctx.table}
             row={rowsCounter}
             nFields={metadata.length}
             label={`${element.column_name}`}
@@ -233,7 +233,7 @@ export default function Home() {
 
       return (
         <AutoInput
-          table={selectedPart}
+          table={ctx.table}
           row={rowsCounter}
           nFields={metadata.length}
           label={element.column_name}
@@ -274,9 +274,9 @@ export default function Home() {
   }, []);
 
   useAsyncEffect(async () => {
-    if (selectedPart) {
+    if (ctx.table) {
       let metadata = await fetch(
-        `https://parts.auger.org.ar/api/table/${selectedPart}`,
+        `https://parts.auger.org.ar/api/table/${ctx.table}`,
       );
 
       console.log(metadata);
@@ -292,11 +292,11 @@ export default function Home() {
       setRowsCounter((element) => element + 1);
       populateFields(metadata);
     }
-  }, [selectedPart]);
+  }, [ctx.table]);
 
   return (
     <Context.Provider
-      value={{ valuesObject: {}, table: selectedPart, row: rowsCounter }}
+      value={{ valuesObject: {}, table: ctx.table, row: rowsCounter }}
     >
       {particlesInit ? (
         <Particles
@@ -325,7 +325,7 @@ export default function Home() {
             placeholder="Qué componente o parte desea agregar?"
             className="max-w-lg"
             onSelectionChange={(change) => {
-              //setSelectedPart(change)
+              //setctx.table(change)
               ctx.table = Array.from(change)[0];
             }}
           >
