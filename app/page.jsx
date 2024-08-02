@@ -219,7 +219,7 @@ export default function Home() {
       let isRequired = false;
 
       //Use automatic translation later
-      const nameMap = new Map({ Avail: "Quantity" });
+      const nameMap = new Map(Object.entrie({ Avail: "Quantity" }));
 
       if (nameMap.has(element.column_name))
         element.column_name = nameMap.get(element.column_name);
