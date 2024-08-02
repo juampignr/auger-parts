@@ -326,6 +326,7 @@ export default function Home() {
             placeholder="Qué componente o parte desea agregar?"
             className="max-w-lg"
             onSelectionChange={(change) => {
+              console.log(Object.values(change)[0]);
               ctx.setSelectedPart(Object.values(change)[0]);
             }}
           >
