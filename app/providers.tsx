@@ -16,8 +16,6 @@ export interface ProvidersProps {
 
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
-  const [selectedPart, setSelectedPart] = React.useState(false);
-  const [rowCounter, setRowCounter] = React.useState(0);
 
   return (
     <Context.Provider
