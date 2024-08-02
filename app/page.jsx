@@ -86,15 +86,6 @@ export default function Home() {
   let [selectedPart, setSelectedPart] = useState(false);
   let [rowsCounter, setRowsCounter] = useState(0);
 
-  setSelectedPart = (part) => {
-    setSelectedPart(part);
-    ctx.table = selectedPart;
-  };
-  setRowsCounter = (counter) => {
-    setRowsCounter(counter);
-    ctx.row = counter;
-  };
-
   const [parts, setParts] = useState([]);
   const [rawFields, setRawFields] = useState([]);
   const [fields, setFields] = useState([]);
@@ -194,7 +185,8 @@ export default function Home() {
   );
   //Particles end here
   function handleAddPart(event) {
-    setRowsCounter((element) => element + 1);
+    //setRowsCounter((element) => element + 1);
+    ctx.row += 1;
     populateFields(rawFields);
   }
 
@@ -292,7 +284,8 @@ export default function Home() {
       metadata = (await metadata.json())?.data;
 
       //valuesObject.current = {}
-      setRowsCounter(0);
+      //setRowsCounter(0);
+      ctx.row = 0;
       setRawFields(metadata);
       //setFields([])
 
@@ -332,7 +325,8 @@ export default function Home() {
             placeholder="Qué componente o parte desea agregar?"
             className="max-w-lg"
             onSelectionChange={(change) => {
-              setSelectedPart(Array.from(change)[0]);
+              //setSelectedPart(change)
+              ctx.table = Array.from(change)[0];
             }}
           >
             {(parts) => <SelectItem>{parts.label}</SelectItem>}
