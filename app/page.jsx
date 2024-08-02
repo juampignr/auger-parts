@@ -254,6 +254,8 @@ export default function Home() {
   }
 
   useAsyncEffect(async () => {
+    console.log(ctx);
+
     let parts = await fetch("https://parts.auger.org.ar/api/parts/");
     parts = (await parts.json())?.data;
 
