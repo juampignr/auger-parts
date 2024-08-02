@@ -328,6 +328,7 @@ export default function Home() {
             onSelectionChange={(change) => {
               console.log(Object.values(change)[0]);
               ctx.setSelectedPart(Object.values(change)[0]);
+              console.log(ctx.selectedPart);
             }}
           >
             {(parts) => <SelectItem>{parts.label}</SelectItem>}
