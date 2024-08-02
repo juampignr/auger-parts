@@ -55,7 +55,7 @@ export const SearchInput = ({ label, alias, nFields }) => {
         onSelectionChange={(key) => {
           let rowsValues = ctx.valuesObject[fieldRow];
 
-          rowsValues[field.current] = key;
+          rowsValues[label] = key;
 
           console.log(ctx);
 

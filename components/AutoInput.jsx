@@ -40,7 +40,7 @@ export const AutoInput = ({ label, alias, required, regex, nFields }) => {
           } else {
             let rowsValues = ctx.valuesObject[fieldRow];
 
-            rowsValues[fieldLabel] = event.target.value;
+            rowsValues[label] = event.target.value;
 
             console.log(ctx);
 
