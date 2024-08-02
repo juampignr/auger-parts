@@ -83,7 +83,7 @@ let warn = (arg) => {
 export default function Home() {
   const ctx = useContext(Context);
 
-  let [ctx.table, setctx.table] = useState(false);
+  //let [selectedPart, setSelectedPart] = useState(false);
   let [rowsCounter, setRowsCounter] = useState(0);
 
   const [parts, setParts] = useState([]);
