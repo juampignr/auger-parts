@@ -242,8 +242,6 @@ export default function Home() {
       );
     });
 
-    show(jsx);
-
     if (!fields.length) {
       setFields(jsx ?? []);
     } else {
@@ -275,7 +273,7 @@ export default function Home() {
   }, []);
 
   useAsyncEffect(async () => {
-    show(ctx.selectedPart);
+    console.log(ctx.selectedPart);
 
     if (ctx.selectedPart) {
       let metadata = await fetch(
@@ -329,9 +327,9 @@ export default function Home() {
             className="max-w-lg"
             onSelectionChange={(change) => {
               //setctx.selectedPart(change)
-              show(change);
+              console.log(change);
               ctx.setSelectedPart(Array.from(change)[0]);
-              show(ctx.selectedPart);
+              console.log(ctx.selectedPart);
             }}
           >
             {(parts) => <SelectItem>{parts.label}</SelectItem>}
