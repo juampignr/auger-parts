@@ -185,8 +185,7 @@ export default function Home() {
   );
   //Particles end here
   function handleAddPart(event) {
-    //setRowsCounter((element) => element + 1);
-    ctx.row += 1;
+    ctx.setRowsCounter((element) => element + 1);
     populateFields(rawFields);
   }
 
@@ -274,6 +273,8 @@ export default function Home() {
   }, []);
 
   useAsyncEffect(async () => {
+    show(ctx.selectedPart);
+
     if (ctx.selectedPart) {
       let metadata = await fetch(
         `https://parts.auger.org.ar/api/table/${ctx.selectedPart}`,
@@ -285,7 +286,7 @@ export default function Home() {
 
       //valuesObject.current = {}
       //setRowsCounter(0);
-      ctx.row = 0;
+      ctx.setRowCounter(0);
       setRawFields(metadata);
       //setFields([])
 
