@@ -222,7 +222,7 @@ export default function Home() {
       const nameMap = new Map(Object.entries({ Avail: "Quantity" }));
 
       if (nameMap.has(element.column_name))
-        element.column_name = nameMap.get(element.column_name);
+        element["column_alias"] = nameMap.get(element.column_name);
 
       if (element.associated_table) {
         return (
@@ -231,6 +231,7 @@ export default function Home() {
             row={rowCounter}
             nFields={metadata.length}
             label={`${element.column_name}`}
+            alias={element.column_alias}
           />
         );
       }
@@ -243,6 +244,7 @@ export default function Home() {
           row={rowCounter}
           nFields={metadata.length}
           label={element.column_name}
+          alias={element.column_alias}
           required={isRequired}
           regex={regex}
         />

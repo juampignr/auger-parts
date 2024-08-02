@@ -5,7 +5,7 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Context } from "/app/providers";
 import useAsyncEffect from "use-async-effect";
 
-export const SearchInput = ({ label, nFields }) => {
+export const SearchInput = ({ label, alias, nFields }) => {
   const ctx = useContext(Context);
 
   const [items, setItems] = useState([]);
@@ -13,7 +13,7 @@ export const SearchInput = ({ label, nFields }) => {
   const [value, setValue] = useState(false);
   const [fieldColor, setFieldColor] = useState("default");
 
-  const field = useRef(label ?? "");
+  const field = useRef(alias ? alias : label ?? "");
   const fieldTable = useRef(ctx.table ?? "");
   const timeoutID = useRef(0);
 

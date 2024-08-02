@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { Input } from "@nextui-org/input";
 import { Context } from "/app/providers";
 
-export const AutoInput = ({ label, required, regex, nFields }) => {
+export const AutoInput = ({ label, alias, required, regex, nFields }) => {
   const ctx = useContext(Context);
 
   const fieldRow = ctx.row;
@@ -22,7 +22,8 @@ export const AutoInput = ({ label, required, regex, nFields }) => {
 
   const [isInvalid, setIsInvalid] = useState(false);
   const [fieldColor, setFieldColor] = useState("default");
-  const [fieldLabel, setFieldLabel] = useState(label ?? "");
+
+  let [fieldLabel, setFieldLabel] = useState(alias ? alias : label ?? "");
 
   return (
     <div className="lg:w-1/6 md:w-1/4 sm:w-1/2 animate__animated animate__fadeInDown">
