@@ -221,7 +221,7 @@ export default function Home() {
       if (element.associated_table) {
         return (
           <SearchInput
-            table={ctx.table}
+            table={ctx.selectedPart}
             row={rowsCounter}
             nFields={metadata.length}
             label={`${element.column_name}`}
@@ -233,7 +233,7 @@ export default function Home() {
 
       return (
         <AutoInput
-          table={ctx.table}
+          table={ctx.selectedPart}
           row={rowsCounter}
           nFields={metadata.length}
           label={element.column_name}
@@ -274,9 +274,9 @@ export default function Home() {
   }, []);
 
   useAsyncEffect(async () => {
-    if (ctx.table) {
+    if (ctx.selectedPart) {
       let metadata = await fetch(
-        `https://parts.auger.org.ar/api/table/${ctx.table}`,
+        `https://parts.auger.org.ar/api/table/${ctx.selectedPart}`,
       );
 
       console.log(metadata);
@@ -292,11 +292,11 @@ export default function Home() {
       setRowsCounter((element) => element + 1);
       populateFields(metadata);
     }
-  }, [ctx.table]);
+  }, [ctx.selectedPart]);
 
   return (
     <Context.Provider
-      value={{ valuesObject: {}, table: ctx.table, row: rowsCounter }}
+      value={{ valuesObject: {}, table: ctx.selectedPart, row: rowsCounter }}
     >
       {particlesInit ? (
         <Particles
@@ -325,8 +325,8 @@ export default function Home() {
             placeholder="Qué componente o parte desea agregar?"
             className="max-w-lg"
             onSelectionChange={(change) => {
-              //setctx.table(change)
-              ctx.table = Array.from(change)[0];
+              //setctx.selectedPart(change)
+              ctx.setSelectedPart(Array.from(change)[0]);
             }}
           >
             {(parts) => <SelectItem>{parts.label}</SelectItem>}

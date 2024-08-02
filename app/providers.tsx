@@ -16,9 +16,19 @@ export interface ProvidersProps {
 
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
+  const [selectedPart, setSelectedPart] = React.useState(false);
+  const [rowCounter, setRowCounter] = React.useState(0);
 
   return (
-    <Context.Provider value={{ valuesObject: {}, table: "", row: 0 }}>
+    <Context.Provider
+      value={{
+        valuesObject: {},
+        part: selectedPart,
+        setSelectedPart: setSelectedPart,
+        rowCounter: rowCounter,
+        setRowCounter: setRowCounter,
+      }}
+    >
       <NextUIProvider navigate={router.push}>
         <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
       </NextUIProvider>
