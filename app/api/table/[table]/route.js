@@ -58,7 +58,7 @@ export async function POST(request, { params }) {
       `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
     );
 
-    let [result, metadata] = await connection.query(
+    /*let [result, metadata] = await connection.query(
       `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
     );
 
@@ -66,7 +66,7 @@ export async function POST(request, { params }) {
 
     console.log(result);
     console.log(metadata);
-
+    */
     await connection.end();
 
     return Response.json({ status: "ok", data: "changeme" });
