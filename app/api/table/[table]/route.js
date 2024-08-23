@@ -61,10 +61,16 @@ export async function POST(request, { params }) {
       }
     }
 
-    console.log(Object.keys(templateFields).length);
+    console.log(parsedData["Avail"]);
+    console.log(parseInt(parsedData["Avail"]));
 
     if (Object.keys(templateFields).length) {
-      for (let [i, n] = [0, parseInt(data["Avail"])]; i < n; i++) {
+      for (let index = 0; index < array.length; index++) {
+        const element = array[index];
+      }
+      for (let [i, n] = [0, parseInt(parsedData["Avail"])]; i < n; i++) {
+        //for (let index = 0; index < parseInt(data["Avail"]); index++) {
+
         for (const key in templateFields) {
           if (Object.hasOwnProperty.call(templateFields, key)) {
             const value = templateFields[key].replace("#", i);
