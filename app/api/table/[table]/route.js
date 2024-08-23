@@ -61,10 +61,20 @@ export async function POST(request, { params }) {
       }
     }
 
-    console.log(templateFields);
-    console.log(
-      `${Object.keys(templateFields).length ? "Inserting one by one" : "Inserting all at once"}: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
-    );
+    if (Object.keys(templateFields).length) {
+      for (const [i, n] = [0, parseInt(data["Avail"])]; i < n; i++) {
+        for (const key in templateFields) {
+          if (Object.hasOwnProperty.call(templateFields, key)) {
+            const value = templateFields[key].replace("#", i);
+            parsedData[key] = value;
+          }
+        }
+
+        console.log(
+          `Inserting one by one: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+        );
+      }
+    }
 
     /*let [result, metadata] = await connection.query(
       `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
