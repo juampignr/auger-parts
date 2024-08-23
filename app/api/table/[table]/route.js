@@ -61,6 +61,8 @@ export async function POST(request, { params }) {
       }
     }
 
+    console.log(Object.keys(templateFields).length);
+
     if (Object.keys(templateFields).length) {
       for (let [i, n] = [0, parseInt(data["Avail"])]; i < n; i++) {
         for (const key in templateFields) {
