@@ -62,7 +62,7 @@ export async function POST(request, { params }) {
     }
 
     if (Object.keys(templateFields).length) {
-      for (const [i, n] = [0, parseInt(data["Avail"])]; i < n; i++) {
+      for (let [i, n] = [0, parseInt(data["Avail"])]; i < n; i++) {
         for (const key in templateFields) {
           if (Object.hasOwnProperty.call(templateFields, key)) {
             const value = templateFields[key].replace("#", i);
