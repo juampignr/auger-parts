@@ -32,6 +32,7 @@ export async function POST(request, { params }) {
     data = Object.fromEntries(data.entries());
 
     let parsedData = {};
+    let oneByOne = false;
 
     const connection = await mysql.createConnection({
       host: "db.auger.org.ar",
@@ -44,8 +45,10 @@ export async function POST(request, { params }) {
 
     for (const key in data) {
       if (Object.hasOwnProperty.call(data, key)) {
-        const [name, type] = key.split(":");
+        const [name, type, template] = key.split(":");
         const element = data[key];
+
+        if (parseInt(template)) oneByOne = true;
 
         if (type === "string") {
           parsedData[name] = `'${element}'`;
@@ -55,7 +58,7 @@ export async function POST(request, { params }) {
       }
     }
     console.log(
-      `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+      `${oneByOne ? "Inserting one by one" : "Inserting all at once"}: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
     );
 
     /*let [result, metadata] = await connection.query(
