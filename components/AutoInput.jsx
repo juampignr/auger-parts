@@ -66,7 +66,7 @@ export const AutoInput = ({ label, alias, required, regex, nFields }) => {
 
                     formData.append(
                       `${key}:${typeof value}:${template}`,
-                      rowsValues[key],
+                      value,
                     );
                   }
                 }

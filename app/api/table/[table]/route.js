@@ -32,6 +32,7 @@ export async function POST(request, { params }) {
     data = Object.fromEntries(data.entries());
 
     let parsedData = {};
+    let templateFields = {};
     let oneByOne = false;
 
     const connection = await mysql.createConnection({
@@ -48,7 +49,9 @@ export async function POST(request, { params }) {
         const [name, type, template] = key.split(":");
         const element = data[key];
 
-        if (parseInt(template)) oneByOne = true;
+        if (parseInt(template)) {
+          templateFields[name] = data[key];
+        }
 
         if (type === "string") {
           parsedData[name] = `'${element}'`;
@@ -58,8 +61,9 @@ export async function POST(request, { params }) {
       }
     }
 
+    console.log(templateFields);
     console.log(
-      `${oneByOne ? "Inserting one by one" : "Inserting all at once"}: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+      `${Object.keys(templateFields).length ? "Inserting one by one" : "Inserting all at once"}: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
     );
 
     /*let [result, metadata] = await connection.query(

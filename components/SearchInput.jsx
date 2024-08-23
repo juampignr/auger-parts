@@ -76,10 +76,7 @@ export const SearchInput = ({ label, alias, nFields }) => {
                     console.log(`Template found on ${key}!: ${value}`);
                   }
 
-                  formData.append(
-                    `${key}:${typeof value}:${template}`,
-                    rowsValues[key],
-                  );
+                  formData.append(`${key}:${typeof value}:${template}`, value);
                 }
               }
 
