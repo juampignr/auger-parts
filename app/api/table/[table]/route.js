@@ -61,7 +61,8 @@ export async function POST(request, { params }) {
       }
     }
 
-    console.log(parsedData["Avail"]);
+    console.log(JSON.stringify(parsedData));
+
     console.log(parseInt(parsedData["Avail"]));
 
     if (Object.keys(templateFields).length) {
