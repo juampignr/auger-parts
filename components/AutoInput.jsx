@@ -55,8 +55,17 @@ export const AutoInput = ({ label, alias, required, regex, nFields }) => {
 
                 for (const key in rowsValues) {
                   if (Object.hasOwnProperty.call(rowsValues, key)) {
+                    let value = rowsValues[key];
+                    let template = 0;
+                    console.log(rowsValues["Avail"]);
+                    if (value.includes("#") && rowsValues["Avail"] > 1) {
+                      value = value.replace("#", "");
+                      template = 1;
+                      console.log(`Template found on ${key}!: ${value}`);
+                    }
+
                     formData.append(
-                      `${key}:${typeof rowsValues[key]}`,
+                      `${key}:${typeof value}:${template}`,
                       rowsValues[key],
                     );
                   }
