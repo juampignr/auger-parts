@@ -57,6 +57,7 @@ export async function POST(request, { params }) {
         }
       }
     }
+
     console.log(
       `${oneByOne ? "Inserting one by one" : "Inserting all at once"}: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
     );
