@@ -22,7 +22,8 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
   const fieldsNumber = nFields;
 
   useEffect(() => {
-    ctx.valuesObject[fieldRow] = {};
+    if (!ctx.valuesObject[fieldRow]) ctx.valuesObject[fieldRow] = {};
+
     if (placeholder) setValuePlaceholder(placeholder);
   }, []);
 
