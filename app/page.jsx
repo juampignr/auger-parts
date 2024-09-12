@@ -209,9 +209,8 @@ export default function Home() {
         if (Object.keys(part[0]).includes(columnName)) {
           rawFields[index]["default_value"] = part[0][columnName];
         }
-
-        console.log(rawFields);
       }
+      console.log(rawFields);
     }
   }
 
