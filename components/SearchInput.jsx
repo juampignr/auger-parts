@@ -5,7 +5,7 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Context } from "/app/providers";
 import useAsyncEffect from "use-async-effect";
 
-export const SearchInput = ({ label, alias, nFields }) => {
+export const SearchInput = ({ label, alias, nFields, auto }) => {
   const ctx = useContext(Context);
 
   const [items, setItems] = useState([]);
@@ -16,16 +16,17 @@ export const SearchInput = ({ label, alias, nFields }) => {
   const field = useRef(alias ? alias : label ?? "");
   const fieldTable = useRef(ctx.table ?? "");
   const timeoutID = useRef(0);
+  const auto = useRef(auto ?? true);
 
   const fieldRow = ctx.row;
   const fieldsNumber = nFields;
 
   useEffect(() => {
-    ctx.valuesObject[fieldRow] = {};
+    if (auto.current) ctx.valuesObject[fieldRow] = {};
   }, []);
 
   useAsyncEffect(async () => {
-    if (isOpen) {
+    if (isOpen && auto.current) {
       let parts = await fetch(
         `https://parts.auger.org.ar/api/associated/${field.current}`,
       );
@@ -53,46 +54,50 @@ export const SearchInput = ({ label, alias, nFields }) => {
         placeholder={field.current}
         onOpenChange={(state, action) => (!isOpen ? setIsOpen(true) : isOpen)}
         onSelectionChange={(key) => {
-          let rowsValues = ctx.valuesObject[fieldRow];
+          if (auto.current) {
+            let rowsValues = ctx.valuesObject[fieldRow];
 
-          rowsValues[label] = key;
+            rowsValues[label] = key;
+            console.log(ctx);
 
-          console.log(ctx);
+            if (Object.values(rowsValues).length === fieldsNumber) {
+              clearTimeout(timeoutID.current);
 
-          if (Object.values(rowsValues).length === fieldsNumber) {
-            clearTimeout(timeoutID.current);
+              timeoutID.current = setTimeout(async () => {
+                const formData = new FormData();
 
-            timeoutID.current = setTimeout(async () => {
-              const formData = new FormData();
+                for (const key in rowsValues) {
+                  if (Object.hasOwnProperty.call(rowsValues, key)) {
+                    let value = rowsValues[key];
+                    let template = 0;
 
-              for (const key in rowsValues) {
-                if (Object.hasOwnProperty.call(rowsValues, key)) {
-                  let value = rowsValues[key];
-                  let template = 0;
-                  console.log(rowsValues["Avail"]);
-                  if (value.includes("#") && rowsValues["Avail"] > 1) {
-                    template = 1;
-                    console.log(`Template found on ${key}!: ${value}`);
+                    if (value.includes("#") && rowsValues["Avail"] > 1) {
+                      template = 1;
+                      console.log(`Template found on ${key}!: ${value}`);
+                    }
+
+                    formData.append(
+                      `${key}:${typeof value}:${template}`,
+                      value,
+                    );
                   }
-
-                  formData.append(`${key}:${typeof value}:${template}`, value);
                 }
-              }
 
-              //Make Miguel responsible for all muahahaha
-              formData.append("UserID", 39);
+                //Make Miguel responsible for all muahahaha
+                formData.append("UserID", 39);
 
-              const postResult = await fetch(
-                `https://parts.auger.org.ar/api/table/${fieldTable.current}`,
-                {
-                  method: "POST",
-                  body: formData,
-                },
-              );
+                const postResult = await fetch(
+                  `https://parts.auger.org.ar/api/table/${fieldTable.current}`,
+                  {
+                    method: "POST",
+                    body: formData,
+                  },
+                );
 
-              setFieldColor("success");
-              setFieldLabel("Parte ingresada!");
-            }, 10000);
+                setFieldColor("success");
+                setFieldLabel("Parte ingresada!");
+              }, 10000);
+            }
           }
         }}
       >
