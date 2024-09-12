@@ -26,9 +26,14 @@ export async function GET(request, { params }) {
 
     for (const field of fields) {
       if (!["inTime", "UserID", "ID"].includes(field.Field))
-        includedFields += `, ${field.Field}`;
+        includedFields += `${field.Field},`;
     }
-    console.log(includedFields);
+
+    let [items, itemsMetadata] = await connection.query(
+      `show ${includedFields} from ${table} where ID like '%${id}%' or Name like '%${id}%'`,
+    );
+
+    console.log(items);
 
     await connection.end();
 
