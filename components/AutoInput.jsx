@@ -31,6 +31,7 @@ export const AutoInput = ({ label, alias, required, regex, nFields }) => {
         color={fieldColor}
         isRequired={isRequired}
         isInvalid={isInvalid}
+        value="test"
         type="text"
         label={`${fieldLabel}`}
         onChange={(event) => {
