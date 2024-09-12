@@ -6,7 +6,10 @@ export const dynamic = "force-dynamic"; // defaults to auto
 export async function GET(request, { params }) {
   try {
     console.log(params);
-    /*
+
+    const table = params?.table;
+    const id = params?.id;
+
     const connection = await mysql.createConnection({
       host: "db.auger.org.ar",
       user: "mocca",
@@ -14,15 +17,16 @@ export async function GET(request, { params }) {
       database: "PMS",
     });
 
+    //  `SELECT DISTINCT * NOT IN ('inTime', 'UserID', 'ID')`,
+
     let [fields, metadata] = await connection.query(
-      `SELECT DISTINCT c.column_name, c.column_type ,t.table_name AS associated_table FROM information_schema.columns c LEFT JOIN information_schema.tables t ON c.column_name = t.table_name WHERE c.table_name = '${params.table}' AND c.column_name NOT IN ('inTime', 'UserID', 'ID')`,
+      `select not in ('inTime', 'UserID', 'ID') from table`,
     );
 
     console.log(fields);
 
     await connection.end();
 
-    */
     return Response.json({ status: "ok", data: [] });
   } catch (error) {
     return Response.json({ status: "error", error: error.stack });
