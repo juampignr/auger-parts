@@ -210,7 +210,11 @@ export default function Home() {
           rawFields[index]["default_value"] = part[0][columnName];
         }
       }
-      console.log(rawFields);
+
+      setRowCounter(0);
+      ctx.row = 0;
+      setParts([]);
+      populateFields(metadata);
     }
   }
 
