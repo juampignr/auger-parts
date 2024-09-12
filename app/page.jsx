@@ -190,12 +190,17 @@ export default function Home() {
     populateFields(rawFields);
   }
 
-  function handleSearchPart(event) {
-    console.log("Toggled search");
-    //setRowCounter((element) => element + 1);
-    //ctx.row += 1;
-    //populateFields(rawFields);
-    console.log(ctx.valuesObject["1"]["Name"]);
+  async function handleSearchPart(event) {
+    const id = ctx.valuesObject["1"]["Name"];
+
+    if (id) {
+      let part = await fetch(
+        `https://parts.auger.org.ar/api/part/${selectedPart}/${id}`,
+      );
+
+      part = (await parts.json())?.data;
+      console.log(part);
+    }
   }
 
   async function handleSelection(event) {
