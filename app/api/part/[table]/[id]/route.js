@@ -20,7 +20,7 @@ export async function GET(request, { params }) {
     //  `SELECT DISTINCT * NOT IN ('inTime', 'UserID', 'ID')`,
 
     let [fields, metadata] = await connection.query(
-      `select not in ('inTime', 'UserID', 'ID') from table`,
+      `select not in ('inTime', 'UserID', 'ID') from ${table}`,
     );
 
     console.log(fields);
