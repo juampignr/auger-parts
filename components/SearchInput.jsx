@@ -16,17 +16,17 @@ export const SearchInput = ({ label, alias, nFields, auto }) => {
   const field = useRef(alias ? alias : label ?? "");
   const fieldTable = useRef(ctx.table ?? "");
   const timeoutID = useRef(0);
-  const auto = useRef(auto ?? true);
+  const autoPost = useRef(auto ?? true);
 
   const fieldRow = ctx.row;
   const fieldsNumber = nFields;
 
   useEffect(() => {
-    if (auto.current) ctx.valuesObject[fieldRow] = {};
+    if (autoPost.current) ctx.valuesObject[fieldRow] = {};
   }, []);
 
   useAsyncEffect(async () => {
-    if (isOpen && auto.current) {
+    if (isOpen && autoPost.current) {
       let parts = await fetch(
         `https://parts.auger.org.ar/api/associated/${field.current}`,
       );
@@ -54,7 +54,7 @@ export const SearchInput = ({ label, alias, nFields, auto }) => {
         placeholder={field.current}
         onOpenChange={(state, action) => (!isOpen ? setIsOpen(true) : isOpen)}
         onSelectionChange={(key) => {
-          if (auto.current) {
+          if (autoPost.current) {
             let rowsValues = ctx.valuesObject[fieldRow];
 
             rowsValues[label] = key;
