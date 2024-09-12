@@ -214,7 +214,7 @@ export default function Home() {
       setRowCounter(0);
       ctx.row = 0;
       setParts([]);
-      populateFields(metadata);
+      populateFields(rawFields);
     }
   }
 
