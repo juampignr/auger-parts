@@ -34,10 +34,10 @@ export async function GET(request, { params }) {
     console.log(
       `select ${includedFields.replace(/,$/, "")} from ${table} where ID like '%${id}%' or Name like '%${id}%'`,
     );
-    console.log(items);
+
     await connection.end();
 
-    return Response.json({ status: "ok", data: items });
+    return Response.json({ status: "ok", data: items[0] });
   } catch (error) {
     console.log(error);
     return Response.json({ status: "error", error: error.stack });
