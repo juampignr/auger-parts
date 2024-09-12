@@ -269,7 +269,7 @@ export default function Home() {
 
       return (
         <AutoInput
-          placeholder={defaultValue}
+          defaultValue={defaultValue}
           table={selectedPart}
           row={rowCounter}
           nFields={metadata.length}
