@@ -19,11 +19,16 @@ export async function GET(request, { params }) {
 
     //  `SELECT DISTINCT * NOT IN ('inTime', 'UserID', 'ID')`,
 
+    let includedFields = "";
     let [fields, metadata] = await connection.query(
       `show columns from ${table}`,
     );
 
-    console.log(fields);
+    for (const fieldName in fields) {
+      if (!["inTime", "UserID", "ID"].contains(fieldName))
+        includedFields + `,${fieldName}`;
+    }
+    console.log(includedFields);
 
     await connection.end();
 
