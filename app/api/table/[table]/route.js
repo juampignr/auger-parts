@@ -35,9 +35,14 @@ export async function POST(request, { params }) {
     let templateFields = {};
     let oneByOne = false;
     let update = false;
+    let id;
 
     if (data["Update:string:0"]) {
       update = true;
+
+      id = data["Name:string:0"];
+
+      delete data["Name:string:0"];
       delete data["Update:string:0"];
     }
 
@@ -77,34 +82,42 @@ export async function POST(request, { params }) {
 
     console.log(parsedData);
 
-    if (Object.keys(templateFields).length) {
-      for (let [i, n] = [0, parseInt(parsedData["Avail"])]; i < n; i++) {
-        for (const key in templateFields) {
-          if (Object.hasOwnProperty.call(templateFields, key)) {
-            const value = templateFields[key].replace("#", i);
-            parsedData[key] = value;
-          }
-        }
+    if (update) {
+      let encodedUpdate = "";
 
-        console.log(
-          `Inserting one by one: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
-        );
+      for (const key of parsedData) {
+        encodedUpdate += ` ${key} = ${parsedData[key]}`;
       }
+      console.log(`update SET ${encodedUpdate} where Name = '${id}'`);
     } else {
-      console.log(
-        `Inserting all at once: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
-      );
-      /*let [result, metadata] = await connection.query(
-        `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
-      );
+      if (Object.keys(templateFields).length) {
+        for (let [i, n] = [0, parseInt(parsedData["Avail"])]; i < n; i++) {
+          for (const key in templateFields) {
+            if (Object.hasOwnProperty.call(templateFields, key)) {
+              const value = templateFields[key].replace("#", i);
+              parsedData[key] = value;
+            }
+          }
 
-      console.log("### RESULT ###");
+          console.log(
+            `Inserting one by one: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+          );
+        }
+      } else {
+        console.log(
+          `Inserting all at once: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+        );
+        /*let [result, metadata] = await connection.query(
+          `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+        );
 
-      console.log(result);
-      console.log(metadata);
-      */
+        console.log("### RESULT ###");
+
+        console.log(result);
+        console.log(metadata);
+        */
+      }
     }
-
     await connection.end();
 
     return Response.json({ status: "ok", data: "changeme" });
