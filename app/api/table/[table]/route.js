@@ -64,13 +64,10 @@ export async function POST(request, { params }) {
         }
 
         if (type === "string") {
-          const tryAndParse = parseInt(element);
-
-          if (tryAndParse === NaN) {
-            console.log(`Here for ${name}:${element}`);
+          if (Number.isNaN(element)) {
             parsedData[name] = `'${element}'`;
           } else {
-            parsedData[name] = tryAndParse;
+            parsedData[name] = parseInt(element);
           }
         } else {
           parsedData[name] = element;
