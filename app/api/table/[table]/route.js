@@ -64,7 +64,7 @@ export async function POST(request, { params }) {
         }
 
         if (type === "string") {
-          if (Number.isNaN(element)) {
+          if (isNaN(element)) {
             parsedData[name] = `'${element}'`;
           } else {
             parsedData[name] = parseInt(element);
