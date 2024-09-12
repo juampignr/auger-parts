@@ -195,18 +195,7 @@ export default function Home() {
     //setRowCounter((element) => element + 1);
     //ctx.row += 1;
     //populateFields(rawFields);
-    setFields((element) => {
-      return [
-        ...element,
-        <SearchInput
-          table={selectedPart}
-          row={0}
-          nFields={metadata.length}
-          label={"Name"}
-          auto={false}
-        />,
-      ];
-    });
+    console.log(ctx.valuesObject[0]);
   }
 
   async function handleSelection(event) {
