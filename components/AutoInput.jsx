@@ -86,7 +86,7 @@ export const AutoInput = ({
                 }
 
                 //Make Miguel responsible for all muahahaha
-                formData.append("UserID", 39);
+                formData.append("UserID:string:0", 39);
 
                 const postResult = await fetch(
                   `https://parts.auger.org.ar/api/table/${fieldTable.current}`,
