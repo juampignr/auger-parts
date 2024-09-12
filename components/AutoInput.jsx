@@ -63,7 +63,7 @@ export const AutoInput = ({
             ) {
               clearTimeout(timeoutID.current);
 
-              if (valuePlaceholder) rowsValues["Update"] = true;
+              if (valuePlaceholder) rowsValues["Update"] = "true";
 
               timeoutID.current = setTimeout(async () => {
                 const formData = new FormData();

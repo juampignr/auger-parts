@@ -36,9 +36,10 @@ export async function POST(request, { params }) {
     let oneByOne = false;
     let update = false;
 
-    if (data["Update"]) {
+    console.log(data);
+    if (data["Update:string:0"]) {
       update = true;
-      delete data["Update"];
+      delete data["Update:string:0"];
     }
 
     console.log(`Update operation: ${update}`);
