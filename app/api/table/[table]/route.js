@@ -40,8 +40,9 @@ export async function POST(request, { params }) {
     if (data["Update:string:0"]) {
       update = true;
 
-      id = data["Name:string:0"];
+      id = data["ID:string:0"];
 
+      delete data["ID:string:0"];
       delete data["Name:string:0"];
       delete data["Update:string:0"];
     }
@@ -88,7 +89,15 @@ export async function POST(request, { params }) {
       for (const key in parsedData) {
         encodedUpdate += `${key} = ${parsedData[key]}, `;
       }
-      console.log(`update SET ${encodedUpdate} where Name = '${id}'`);
+      //console.log(`update SET ${encodedUpdate} where Name = '${id}'`);
+      let [result, metadata] = await connection.query(
+        `update SET ${encodedUpdate} where Name = '${id}'`,
+      );
+
+      console.log("### RESULT ###");
+
+      console.log(result);
+      console.log(metadata);
     } else {
       if (Object.keys(templateFields).length) {
         for (let [i, n] = [0, parseInt(parsedData["Avail"])]; i < n; i++) {
