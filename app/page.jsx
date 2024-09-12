@@ -254,7 +254,6 @@ export default function Home() {
       return (
         <AutoInput
           table={selectedPart}
-          defaultValue={"testing"}
           row={rowCounter}
           nFields={metadata.length}
           label={element.column_name}
