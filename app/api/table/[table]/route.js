@@ -50,6 +50,8 @@ export async function POST(request, { params }) {
       database: "PMS",
     });
 
+    console.log(data);
+
     for (const key in data) {
       if (Object.hasOwnProperty.call(data, key)) {
         const [name, type, template] = key.split(":");
