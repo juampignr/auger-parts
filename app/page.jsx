@@ -201,7 +201,7 @@ export default function Home() {
       );
 
       part = (await part.json())?.data;
-      console.log(rawFields);
+      console.log(part[0]);
 
       for (const index in rawFields) {
         if (rawFields[index].column_name in Object.keys(part[0])) {
