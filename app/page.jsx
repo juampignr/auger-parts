@@ -230,7 +230,7 @@ export default function Home() {
       ).groups;
 
       let regex = fieldRegex[type?.toUpperCase()];
-      let defaultValue = element.default_value ?? "";
+      let defaultValue = element.default_value;
 
       regex = regex
         .replace("MINIMUM", minimum ?? 0)
