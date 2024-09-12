@@ -195,7 +195,7 @@ export default function Home() {
     //setRowCounter((element) => element + 1);
     //ctx.row += 1;
     //populateFields(rawFields);
-    console.log(ctx.valuesObject[0]);
+    console.log(ctx.valuesObject["1"]["Name"]);
   }
 
   async function handleSelection(event) {
