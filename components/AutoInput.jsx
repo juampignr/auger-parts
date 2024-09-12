@@ -4,7 +4,14 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { Input } from "@nextui-org/input";
 import { Context } from "/app/providers";
 
-export const AutoInput = ({ label, alias, required, regex, nFields }) => {
+export const AutoInput = ({
+  label,
+  alias,
+  required,
+  regex,
+  nFields,
+  defaultValue,
+}) => {
   const ctx = useContext(Context);
 
   const fieldRow = ctx.row;
@@ -16,6 +23,7 @@ export const AutoInput = ({ label, alias, required, regex, nFields }) => {
 
   useEffect(() => {
     ctx.valuesObject[fieldRow] = {};
+    if (defaultValue) setValue(defaultValue);
   }, []);
 
   const isRequired = label === "Name" || required ? true : false;
@@ -24,6 +32,7 @@ export const AutoInput = ({ label, alias, required, regex, nFields }) => {
   const [fieldColor, setFieldColor] = useState("default");
 
   let [fieldLabel, setFieldLabel] = useState(alias ? alias : label ?? "");
+  let [value, setValue] = useState("");
 
   return (
     <div className="lg:w-1/6 md:w-1/4 sm:w-1/2 animate__animated animate__fadeInDown">
@@ -31,7 +40,7 @@ export const AutoInput = ({ label, alias, required, regex, nFields }) => {
         color={fieldColor}
         isRequired={isRequired}
         isInvalid={isInvalid}
-        value="test"
+        value={defaultValue}
         type="text"
         label={`${fieldLabel}`}
         onChange={(event) => {
