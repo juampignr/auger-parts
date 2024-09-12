@@ -55,7 +55,9 @@ export async function POST(request, { params }) {
     for (const key in data) {
       if (Object.hasOwnProperty.call(data, key)) {
         const [name, type, template] = key.split(":");
+        console.log(name);
         const element = data[key];
+        console.log(element);
 
         if (parseInt(template)) {
           templateFields[name] = data[key];
