@@ -24,7 +24,8 @@ export async function GET(request, { params }) {
       `show columns from ${table}`,
     );
 
-    for (const fieldName in fields) {
+    for (const field of fields) {
+      console.log(field);
       if (!["inTime", "UserID", "ID"].includes(fieldName))
         includedFields += `, ${fieldName}`;
     }
