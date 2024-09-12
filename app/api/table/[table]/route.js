@@ -67,6 +67,7 @@ export async function POST(request, { params }) {
           try {
             parsedData[name] = parseInt(element);
           } catch (error) {
+            console.log(error);
             parsedData[name] = `'${element}'`;
           }
         } else {
