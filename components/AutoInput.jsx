@@ -40,7 +40,7 @@ export const AutoInput = ({
         color={fieldColor}
         isRequired={isRequired}
         isInvalid={isInvalid}
-        value={defaultValue}
+        placeholder={defaultValue}
         type="text"
         label={`${fieldLabel}`}
         onChange={(event) => {
