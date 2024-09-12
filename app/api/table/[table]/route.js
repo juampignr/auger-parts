@@ -34,6 +34,14 @@ export async function POST(request, { params }) {
     let parsedData = {};
     let templateFields = {};
     let oneByOne = false;
+    let update = false;
+
+    if (data["Update"]) {
+      update = true;
+      delete data["Update"];
+    }
+
+    console.log(`Update operation: ${update}`);
 
     const connection = await mysql.createConnection({
       host: "db.auger.org.ar",
