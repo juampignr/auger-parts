@@ -193,13 +193,13 @@ export default function Home() {
   async function handleSearchPart(event) {
     const id = ctx.valuesObject["1"]["ID"] ?? ctx.valuesObject["1"]["Name"];
 
+    console.log(rawFields);
     if (id) {
       let part = await fetch(
         `https://parts.auger.org.ar/api/part/${selectedPart}/${id}`,
       );
 
       part = (await parts.json())?.data;
-      console.log(part);
     }
   }
 
