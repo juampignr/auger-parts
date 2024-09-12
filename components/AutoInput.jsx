@@ -10,7 +10,7 @@ export const AutoInput = ({
   required,
   regex,
   nFields,
-  defaultValue,
+  placeholder,
 }) => {
   const ctx = useContext(Context);
 
@@ -23,7 +23,7 @@ export const AutoInput = ({
 
   useEffect(() => {
     ctx.valuesObject[fieldRow] = {};
-    if (defaultValue) setValue(defaultValue);
+    if (placeholder) setValuePlaceholder(placeholder);
   }, []);
 
   const isRequired = label === "Name" || required ? true : false;
@@ -32,7 +32,7 @@ export const AutoInput = ({
   const [fieldColor, setFieldColor] = useState("default");
 
   let [fieldLabel, setFieldLabel] = useState(alias ? alias : label ?? "");
-  let [value, setValue] = useState("");
+  let [valuePlaceholder, setValuePlaceholder] = useState("");
 
   return (
     <div className="lg:w-1/6 md:w-1/4 sm:w-1/2 animate__animated animate__fadeInDown">
@@ -40,7 +40,7 @@ export const AutoInput = ({
         color={fieldColor}
         isRequired={isRequired}
         isInvalid={isInvalid}
-        placeholder={value}
+        placeholder={valuePlaceholder}
         type="text"
         label={`${fieldLabel}`}
         onChange={(event) => {
