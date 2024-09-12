@@ -49,8 +49,8 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
         color={fieldColor}
         isRequired
         defaultItems={items}
-        label={valuePlaceholder ?? field.current}
-        placeholder={field.current}
+        label={field.current}
+        placeholder={valuePlaceholder ?? field.current}
         onOpenChange={(state, action) => (!isOpen ? setIsOpen(true) : isOpen)}
         onSelectionChange={(key) => {
           let rowsValues = ctx.valuesObject[fieldRow];
