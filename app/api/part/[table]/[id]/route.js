@@ -26,7 +26,7 @@ export async function GET(request, { params }) {
 
     for (const fieldName in fields) {
       if (!["inTime", "UserID", "ID"].includes(fieldName))
-        includedFields + `,${fieldName}`;
+        includedFields += `, ${fieldName}`;
     }
     console.log(includedFields);
 
