@@ -31,8 +31,10 @@ export async function GET(request, { params }) {
       `select ${includedFields.replace(/,$/, "")} from ${table} where ID like '%${id}%' or Name like '%${id}%'`,
     );
 
-    console.log(`select ${includedFields.replace(/,$/, "")} from ${table} where ID like '%${id}%' or Name like '%${id}%'``)
-    console.log(items)
+    console.log(
+      `select ${includedFields.replace(/,$/, "")} from ${table} where ID like '%${id}%' or Name like '%${id}%'`,
+    );
+    console.log(items);
     await connection.end();
 
     return Response.json({ status: "ok", data: items });
