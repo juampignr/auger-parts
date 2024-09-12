@@ -91,7 +91,7 @@ export async function POST(request, { params }) {
       }
       //console.log(`update SET ${encodedUpdate} where Name = '${id}'`);
       let [result, metadata] = await connection.query(
-        `update SET ${encodedUpdate.replace(/,$/, "")} where Name = '${id}'`,
+        `update SET ${encodedUpdate.replace(/,\s*$/, "")} where Name = '${id}'`,
       );
 
       console.log("### RESULT ###");
