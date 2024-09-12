@@ -211,8 +211,8 @@ export default function Home() {
         }
       }
 
-      setRowCounter(0);
-      ctx.row = 0;
+      setRowCounter(1);
+      ctx.row = 1;
       setFields([]);
       populateFields(rawFields);
     }
