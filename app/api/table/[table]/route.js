@@ -36,7 +36,6 @@ export async function POST(request, { params }) {
     let oneByOne = false;
     let update = false;
 
-    console.log(data);
     if (data["Update:string:0"]) {
       update = true;
       delete data["Update:string:0"];
@@ -50,8 +49,6 @@ export async function POST(request, { params }) {
       password: "Mi:kARgwpb",
       database: "PMS",
     });
-
-    console.log("### QUERY ###");
 
     for (const key in data) {
       if (Object.hasOwnProperty.call(data, key)) {
@@ -73,6 +70,8 @@ export async function POST(request, { params }) {
         }
       }
     }
+
+    console.log(parsedData);
 
     if (Object.keys(templateFields).length) {
       for (let [i, n] = [0, parseInt(parsedData["Avail"])]; i < n; i++) {
