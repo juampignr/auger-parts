@@ -22,7 +22,8 @@ export const AutoInput = ({
   const timeoutID = useRef(0);
 
   useEffect(() => {
-    ctx.valuesObject[fieldRow] = {};
+    if (!ctx.valuesObject[fieldRow]) ctx.valuesObject[fieldRow] = {};
+
     if (placeholder) setValuePlaceholder(placeholder);
   }, []);
 
