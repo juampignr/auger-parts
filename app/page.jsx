@@ -8,7 +8,7 @@ import { Divider } from "@nextui-org/divider";
 import { useState, useRef, useEffect, createContext } from "react";
 import { useAsyncEffect } from "use-async-effect";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { randomBytes } from "crypto";
 import { SearchInput } from "/components/SearchInput";
 import { AutoInput } from "/components/AutoInput";
@@ -190,6 +190,13 @@ export default function Home() {
     populateFields(rawFields);
   }
 
+  function handleSearchPart(event) {
+    console.log("Toggled search");
+    //setRowCounter((element) => element + 1);
+    //ctx.row += 1;
+    //populateFields(rawFields);
+  }
+
   async function handleSelection(event) {
     const field = event.target.value;
 
@@ -350,6 +357,11 @@ export default function Home() {
             icon={faPlus}
             className="text-3xl hover:animate-ping z-10"
             onClick={handleAddPart}
+          />
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            className="text-3xl hover:animate-ping z-10"
+            onClick={handleSearchPart}
           />
         </div>
 
