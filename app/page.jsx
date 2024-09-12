@@ -204,7 +204,7 @@ export default function Home() {
       console.log(rawFields);
 
       for (const index in rawFields) {
-        if (rawFields[index].column_name in Object.keys(part)) {
+        if (rawFields[index].column_name in Object.keys(part[0])) {
           console.log(part[rawFields[index].column_name]);
         }
       }
