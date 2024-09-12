@@ -91,6 +91,8 @@ export default function Home() {
   const [fields, setFields] = useState([]);
   const [rows, setRows] = useState([]);
   const [particlesInit, setParticlesInit] = useState(false);
+  const [defaultValuesMap, setDefaultValuesMap] = useState({});
+
   const parentRef = useRef(false);
 
   const particlesLoaded = (container) => {
@@ -199,7 +201,13 @@ export default function Home() {
       );
 
       part = (await part.json())?.data;
-      console.log(part);
+      console.log(rawFields);
+
+      /*
+      for (key of part) {
+        part[key];
+      }
+      */
     }
   }
 
@@ -222,6 +230,7 @@ export default function Home() {
       ).groups;
 
       let regex = fieldRegex[type?.toUpperCase()];
+      let defaultValue = element.default_value ?? "";
 
       regex = regex
         .replace("MINIMUM", minimum ?? 0)
@@ -253,6 +262,7 @@ export default function Home() {
 
       return (
         <AutoInput
+          defaultValue={defaultValue}
           table={selectedPart}
           row={rowCounter}
           nFields={metadata.length}
