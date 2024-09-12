@@ -256,6 +256,7 @@ export default function Home() {
       if (element.associated_table) {
         return (
           <SearchInput
+            placeholder={defaultValue}
             table={selectedPart}
             row={rowCounter}
             nFields={metadata.length}

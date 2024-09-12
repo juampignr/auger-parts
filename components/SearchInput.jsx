@@ -5,42 +5,41 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Context } from "/app/providers";
 import useAsyncEffect from "use-async-effect";
 
-export const SearchInput = ({ label, alias, nFields, auto }) => {
+export const SearchInput = ({ label, alias, nFields, placeholder }) => {
   const ctx = useContext(Context);
 
   const [items, setItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(false);
   const [fieldColor, setFieldColor] = useState("default");
+  const [valuePlaceholder, setValuePlaceholder] = useState("");
 
   const field = useRef(alias ? alias : label ?? "");
   const fieldTable = useRef(ctx.table ?? "");
   const timeoutID = useRef(0);
-  const autoPost = useRef(auto ?? true);
 
   const fieldRow = ctx.row;
   const fieldsNumber = nFields;
 
   useEffect(() => {
-    if (autoPost.current) ctx.valuesObject[fieldRow] = {};
+    ctx.valuesObject[fieldRow] = {};
+    if (placeholder) setValuePlaceholder(placeholder);
   }, []);
 
   useAsyncEffect(async () => {
-    if (isOpen && autoPost.current) {
-      let parts = await fetch(
-        `https://parts.auger.org.ar/api/associated/${field.current}`,
-      );
-      parts = (await parts.json())?.data;
+    let parts = await fetch(
+      `https://parts.auger.org.ar/api/associated/${field.current}`,
+    );
+    parts = (await parts.json())?.data;
 
-      console.log("### ASSOCIATIVE DATA ###");
-      console.log(parts);
+    console.log("### ASSOCIATIVE DATA ###");
+    console.log(parts);
 
-      for (const part of parts) {
-        setItems((prevItems) => [
-          ...prevItems,
-          { label: part.Name, key: part.ID },
-        ]);
-      }
+    for (const part of parts) {
+      setItems((prevItems) => [
+        ...prevItems,
+        { label: part.Name, key: part.ID },
+      ]);
     }
   }, [isOpen]);
 
@@ -50,54 +49,49 @@ export const SearchInput = ({ label, alias, nFields, auto }) => {
         color={fieldColor}
         isRequired
         defaultItems={items}
-        label={field.current}
+        label={valuePlaceholder ?? field.current}
         placeholder={field.current}
         onOpenChange={(state, action) => (!isOpen ? setIsOpen(true) : isOpen)}
         onSelectionChange={(key) => {
-          if (autoPost.current) {
-            let rowsValues = ctx.valuesObject[fieldRow];
+          let rowsValues = ctx.valuesObject[fieldRow];
 
-            rowsValues[label] = key;
-            console.log(ctx);
+          rowsValues[label] = key;
+          console.log(ctx);
 
-            if (Object.values(rowsValues).length === fieldsNumber) {
-              clearTimeout(timeoutID.current);
+          if (Object.values(rowsValues).length === fieldsNumber) {
+            clearTimeout(timeoutID.current);
 
-              timeoutID.current = setTimeout(async () => {
-                const formData = new FormData();
+            timeoutID.current = setTimeout(async () => {
+              const formData = new FormData();
 
-                for (const key in rowsValues) {
-                  if (Object.hasOwnProperty.call(rowsValues, key)) {
-                    let value = rowsValues[key];
-                    let template = 0;
+              for (const key in rowsValues) {
+                if (Object.hasOwnProperty.call(rowsValues, key)) {
+                  let value = rowsValues[key];
+                  let template = 0;
 
-                    if (value.includes("#") && rowsValues["Avail"] > 1) {
-                      template = 1;
-                      console.log(`Template found on ${key}!: ${value}`);
-                    }
-
-                    formData.append(
-                      `${key}:${typeof value}:${template}`,
-                      value,
-                    );
+                  if (value.includes("#") && rowsValues["Avail"] > 1) {
+                    template = 1;
+                    console.log(`Template found on ${key}!: ${value}`);
                   }
+
+                  formData.append(`${key}:${typeof value}:${template}`, value);
                 }
+              }
 
-                //Make Miguel responsible for all muahahaha
-                formData.append("UserID", 39);
+              //Make Miguel responsible for all muahahaha
+              formData.append("UserID", 39);
 
-                const postResult = await fetch(
-                  `https://parts.auger.org.ar/api/table/${fieldTable.current}`,
-                  {
-                    method: "POST",
-                    body: formData,
-                  },
-                );
+              const postResult = await fetch(
+                `https://parts.auger.org.ar/api/table/${fieldTable.current}`,
+                {
+                  method: "POST",
+                  body: formData,
+                },
+              );
 
-                setFieldColor("success");
-                setFieldLabel("Parte ingresada!");
-              }, 10000);
-            }
+              setFieldColor("success");
+              setFieldLabel("Parte ingresada!");
+            }, 10000);
           }
         }}
       >

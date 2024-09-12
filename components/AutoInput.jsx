@@ -31,8 +31,8 @@ export const AutoInput = ({
   const [isInvalid, setIsInvalid] = useState(false);
   const [fieldColor, setFieldColor] = useState("default");
 
-  let [fieldLabel, setFieldLabel] = useState(alias ? alias : label ?? "");
-  let [valuePlaceholder, setValuePlaceholder] = useState("");
+  const [fieldLabel, setFieldLabel] = useState(alias ? alias : label ?? "");
+  const [valuePlaceholder, setValuePlaceholder] = useState("");
 
   return (
     <div className="lg:w-1/6 md:w-1/4 sm:w-1/2 animate__animated animate__fadeInDown">
