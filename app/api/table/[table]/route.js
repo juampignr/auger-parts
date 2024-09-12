@@ -78,17 +78,21 @@ export async function POST(request, { params }) {
           `Inserting one by one: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
         );
       }
+    } else {
+      console.log(
+        `Inserting all at once: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+      );
+      /*let [result, metadata] = await connection.query(
+        `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+      );
+
+      console.log("### RESULT ###");
+
+      console.log(result);
+      console.log(metadata);
+      */
     }
 
-    /*let [result, metadata] = await connection.query(
-      `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
-    );
-
-    console.log("### RESULT ###");
-
-    console.log(result);
-    console.log(metadata);
-    */
     await connection.end();
 
     return Response.json({ status: "ok", data: "changeme" });

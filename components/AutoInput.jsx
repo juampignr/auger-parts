@@ -32,7 +32,7 @@ export const AutoInput = ({
   const [fieldColor, setFieldColor] = useState("default");
 
   const [fieldLabel, setFieldLabel] = useState(alias ? alias : label ?? "");
-  const [valuePlaceholder, setValuePlaceholder] = useState("");
+  const [valuePlaceholder, setValuePlaceholder] = useState(false);
 
   return (
     <div className="lg:w-1/6 md:w-1/4 sm:w-1/2 animate__animated animate__fadeInDown">
@@ -57,7 +57,10 @@ export const AutoInput = ({
             console.log(
               `Filled ${Object.values(rowsValues).length} out of ${fieldsNumber})`,
             );
-            if (Object.values(rowsValues).length === fieldsNumber) {
+            if (
+              Object.values(rowsValues).length === fieldsNumber ||
+              valuePlaceholder
+            ) {
               clearTimeout(timeoutID.current);
 
               timeoutID.current = setTimeout(async () => {
