@@ -203,11 +203,11 @@ export default function Home() {
       part = (await part.json())?.data;
       console.log(rawFields);
 
-      /*
-      for (key of part) {
-        part[key];
+      for (const index in rawFields) {
+        if (rawFields[index].column_name in part) {
+          console.log(part[rawFields[index].column_name]);
+        }
       }
-      */
     }
   }
 
@@ -230,7 +230,7 @@ export default function Home() {
       ).groups;
 
       let regex = fieldRegex[type?.toUpperCase()];
-      let defaultValue = element.default_value;
+      let defaultValue = element?.default_value;
 
       regex = regex
         .replace("MINIMUM", minimum ?? 0)
