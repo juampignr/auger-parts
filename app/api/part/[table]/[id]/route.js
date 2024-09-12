@@ -25,9 +25,8 @@ export async function GET(request, { params }) {
     );
 
     for (const field of fields) {
-      console.log(field);
-      if (!["inTime", "UserID", "ID"].includes(fieldName))
-        includedFields += `, ${fieldName}`;
+      if (!["inTime", "UserID", "ID"].includes(field.Field))
+        includedFields += `, ${field.Field}`;
     }
     console.log(includedFields);
 
