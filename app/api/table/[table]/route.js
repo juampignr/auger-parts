@@ -86,7 +86,7 @@ export async function POST(request, { params }) {
       let encodedUpdate = "";
 
       for (const key in parsedData) {
-        encodedUpdate += ` ${key} = ${parsedData[key]}`;
+        encodedUpdate += `${key} = ${parsedData[key]}, `;
       }
       console.log(`update SET ${encodedUpdate} where Name = '${id}'`);
     } else {
