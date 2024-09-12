@@ -214,7 +214,7 @@ export default function Home() {
       setRowCounter(1);
       ctx.row = 1;
       setFields([]);
-      ctx.valuesObject = { 1: {ID:id} }ç
+      ctx.valuesObject = { 1: { ID: id } };
 
       populateFields(rawFields);
     }
