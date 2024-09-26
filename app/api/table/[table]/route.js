@@ -89,7 +89,9 @@ export async function POST(request, { params }) {
       for (const key in parsedData) {
         encodedUpdate += `${key} = ${parsedData[key]}, `;
       }
-      //console.log(`update SET ${encodedUpdate} where Name = '${id}'`);
+
+      console.log(`update SET ${encodedUpdate} where Name = '${id}'`);
+      /*
       let [result, metadata] = await connection.query(
         `update ${params.table} SET ${encodedUpdate.replace(/,\s*$/, "")} where Name = '${id}'`,
       );
@@ -98,6 +100,7 @@ export async function POST(request, { params }) {
 
       console.log(result);
       console.log(metadata);
+      */
     } else {
       if (Object.keys(templateFields).length) {
         for (let [i, n] = [0, parseInt(parsedData["Avail"])]; i < n; i++) {
@@ -111,12 +114,20 @@ export async function POST(request, { params }) {
           console.log(
             `Inserting one by one: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
           );
+          let [result, metadata] = await connection.query(
+            `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+          );
+
+          console.log("### RESULT ###");
+
+          console.log(result);
+          console.log(metadata);
         }
       } else {
         console.log(
           `Inserting all at once: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
         );
-        /*let [result, metadata] = await connection.query(
+        let [result, metadata] = await connection.query(
           `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
         );
 
@@ -124,7 +135,6 @@ export async function POST(request, { params }) {
 
         console.log(result);
         console.log(metadata);
-        */
       }
     }
     await connection.end();
