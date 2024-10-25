@@ -23,7 +23,7 @@ export async function GET(request, { params }) {
     );
 
     for (const statusTableNames of statusFields)
-      statusTables.push(statusTableNames);
+      statusTables.push(statusTableNames.associated_table);
 
     for (const fieldObject of fields) {
       if (fieldObject.column_name === "Status")
