@@ -42,22 +42,27 @@ export const SearchInput = ({
     let parts = [];
 
     if (multipleRelations) {
+      console.log("### ASSOCIATIVE DATA MULTIPLE ###");
+
       for (const entries of multipleRelations) {
         let parts = await fetch(
           `https://parts.auger.org.ar/api/associated/${entries}`,
         );
 
-        parts = [parts, ...(await parts.json())?.data];
+        const response = (await parts.json())?.data;
+
+        parts = [parts, ...response];
       }
       console.log(parts);
     } else {
+      console.log("### ASSOCIATIVE DATA SINGLE ###");
+
       let parts = await fetch(
         `https://parts.auger.org.ar/api/associated/${field.current}`,
       );
       parts = (await parts.json())?.data;
     }
 
-    console.log("### ASSOCIATIVE DATA ###");
     console.log(parts);
 
     for (const part of parts) {
