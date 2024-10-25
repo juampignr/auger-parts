@@ -44,7 +44,7 @@ export const SearchInput = ({
     if (multipleRelations) {
       for (const entries of multipleRelations) {
         let parts = await fetch(
-          `https://parts.auger.org.ar/api/associated/${field.current}`,
+          `https://parts.auger.org.ar/api/associated/${entries}`,
         );
 
         parts = [parts, ...(await parts.json())?.data];
