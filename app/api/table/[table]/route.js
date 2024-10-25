@@ -18,12 +18,6 @@ export async function GET(request, { params }) {
       `SELECT DISTINCT c.column_name, c.column_type ,t.table_name AS associated_table FROM information_schema.columns c LEFT JOIN information_schema.tables t ON c.column_name = t.table_name WHERE c.table_name = '${params.table}' AND c.column_name NOT IN ('inTime', 'UserID', 'ID')`,
     );
 
-    let [statusFields] = await connection.query(
-      `SELECT DISTINCT t.table_name AS associated_table FROM information_schema.tables t WHERE BINARY t.table_name like '%Status' and t.table_name not like "%zHis%";`,
-    );
-
-    console.log(fields);
-
     await connection.end();
 
     return Response.json({ status: "ok", data: fields });
