@@ -12,6 +12,8 @@ export async function GET(request, { params }) {
       database: "PMS",
     });
 
+    let statusTables = [];
+
     let [fields, metadata] = await connection.query(
       `SELECT DISTINCT c.column_name, c.column_type ,t.table_name AS associated_table FROM information_schema.columns c LEFT JOIN information_schema.tables t ON c.column_name = t.table_name WHERE c.table_name = '${params.table}' AND c.column_name NOT IN ('inTime', 'UserID', 'ID')`,
     );
@@ -20,8 +22,15 @@ export async function GET(request, { params }) {
       `SELECT DISTINCT t.table_name AS associated_table FROM information_schema.tables t WHERE BINARY t.table_name like '%Status' and t.table_name not like "%zHis%";`,
     );
 
+    for (const statusTableNames of statusFields)
+      statusTables.push(statusTableNames);
+
+    for (const fieldObject of fields) {
+      if (fieldObject.column_name === "Status")
+        fieldObject.associated_table = statusTables;
+    }
+
     console.log(fields);
-    console.log(statusFields);
 
     await connection.end();
 
