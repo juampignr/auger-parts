@@ -34,6 +34,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
 
     parts = (await parts.json())?.data;
 
+    console.log(parts);
     for (const part of parts) {
       setItems((prevItems) => [
         ...prevItems,
