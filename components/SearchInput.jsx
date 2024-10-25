@@ -28,6 +28,8 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
   }, []);
 
   useAsyncEffect(async () => {
+    setItems([]);
+
     let parts = await fetch(
       `https://parts.auger.org.ar/api/associated/${field.current}`,
     );
