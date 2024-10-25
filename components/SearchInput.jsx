@@ -9,7 +9,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
   const ctx = useContext(Context);
 
   const [items, setItems] = useState([]);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(null);
   const [value, setValue] = useState(false);
   const [fieldColor, setFieldColor] = useState("default");
   const [valuePlaceholder, setValuePlaceholder] = useState("");
@@ -51,9 +51,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
         defaultItems={items}
         label={field.current}
         placeholder={valuePlaceholder ?? field.current}
-        onOpenChange={(state, action) =>
-          !isOpen ? setIsOpen(true) : setIsOpen(false)
-        }
+        onOpenChange={(state, action) => isOpen ?? setIsOpen(true)}
         onSelectionChange={(key) => {
           let rowsValues = ctx.valuesObject[fieldRow];
 
