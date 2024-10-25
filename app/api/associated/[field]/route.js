@@ -12,14 +12,20 @@ export async function GET(request, { params }) {
       database: "PMS",
     });
 
-    let [fields, metadata] = await connection.query(
-      `SELECT * FROM ${params.field}`,
-    );
-
-    if (!fields.length) {
+    if (params.field === "Status") {
       let [fields, metadata] = await connection.query(
-        `SELECT * FROM ${params.field}Type`,
+        `select ID,Name from Status union select ID,Name from SPStatus union select ID,Name from EkitStatus union select ID,Name from WaterBottleStatus union select ID,Name from SSDCoverStatus union select ID,Name from RadioStatus union select ID,Name from TestStatus union select ID,Name from SPMTStatus`,
       );
+    } else {
+      let [fields, metadata] = await connection.query(
+        `SELECT * FROM ${params.field}`,
+      );
+
+      if (!fields.length) {
+        let [fields, metadata] = await connection.query(
+          `SELECT * FROM ${params.field}Type`,
+        );
+      }
     }
 
     await connection.end();

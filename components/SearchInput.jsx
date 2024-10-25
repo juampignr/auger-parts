@@ -5,13 +5,7 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Context } from "/app/providers";
 import useAsyncEffect from "use-async-effect";
 
-export const SearchInput = ({
-  label,
-  alias,
-  nFields,
-  placeholder,
-  multipleRelations,
-}) => {
+export const SearchInput = ({ label, alias, nFields, placeholder }) => {
   const ctx = useContext(Context);
 
   const [items, setItems] = useState([]);
@@ -35,34 +29,11 @@ export const SearchInput = ({
   }, []);
 
   useAsyncEffect(async () => {
-    console.log(
-      `${field.current.toUpperCase()} has multiple relations: ${multipleRelations}`,
+    let parts = await fetch(
+      `https://parts.auger.org.ar/api/associated/${field.current}`,
     );
 
-    let partsObject = [];
-
-    if (multipleRelations) {
-      console.log("### ASSOCIATIVE DATA MULTIPLE ###");
-
-      for (const entries of multipleRelations) {
-        let parts = await fetch(
-          `https://parts.auger.org.ar/api/associated/${entries}`,
-        );
-
-        const response = (await parts.json())?.data;
-
-        partsObject = [...partsObject, ...response];
-
-        console.log(parts);
-      }
-    } else {
-      console.log("### ASSOCIATIVE DATA SINGLE ###");
-
-      let parts = await fetch(
-        `https://parts.auger.org.ar/api/associated/${field.current}`,
-      );
-      partsObject = [...partsObject, ...response];
-    }
+    parts = (await parts.json())?.data;
 
     for (const part of partsObject) {
       setItems((prevItems) => [

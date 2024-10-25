@@ -22,14 +22,6 @@ export async function GET(request, { params }) {
       `SELECT DISTINCT t.table_name AS associated_table FROM information_schema.tables t WHERE BINARY t.table_name like '%Status' and t.table_name not like "%zHis%";`,
     );
 
-    for (const statusTableNames of statusFields)
-      statusTables.push(statusTableNames.associated_table);
-
-    for (const fieldObject of fields) {
-      if (fieldObject.column_name === "Status")
-        fieldObject.associated_table = statusTables;
-    }
-
     console.log(fields);
 
     await connection.end();
