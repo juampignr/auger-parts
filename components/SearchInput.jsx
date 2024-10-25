@@ -39,10 +39,23 @@ export const SearchInput = ({
       `${field.current.toUpperCase()} has multiple relations: ${multipleRelations}`,
     );
 
-    let parts = await fetch(
-      `https://parts.auger.org.ar/api/associated/${field.current}`,
-    );
-    parts = (await parts.json())?.data;
+    let parts = [];
+
+    if (multipleRelations) {
+      for (const entries of multipleRelations) {
+        let parts = await fetch(
+          `https://parts.auger.org.ar/api/associated/${field.current}`,
+        );
+
+        parts = [parts, ...(await parts.json())?.data];
+      }
+      console.log(parts);
+    } else {
+      let parts = await fetch(
+        `https://parts.auger.org.ar/api/associated/${field.current}`,
+      );
+      parts = (await parts.json())?.data;
+    }
 
     console.log("### ASSOCIATIVE DATA ###");
     console.log(parts);
