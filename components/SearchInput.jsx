@@ -39,7 +39,7 @@ export const SearchInput = ({
       `${field.current.toUpperCase()} has multiple relations: ${multipleRelations}`,
     );
 
-    let parts = [];
+    let partsObject = [];
 
     if (multipleRelations) {
       console.log("### ASSOCIATIVE DATA MULTIPLE ###");
@@ -51,7 +51,7 @@ export const SearchInput = ({
 
         const response = (await parts.json())?.data;
 
-        parts = [...parts, ...response];
+        partsObject = [...partsObject, ...response];
 
         console.log(parts);
       }
@@ -61,10 +61,10 @@ export const SearchInput = ({
       let parts = await fetch(
         `https://parts.auger.org.ar/api/associated/${field.current}`,
       );
-      parts = (await parts.json())?.data;
+      partsObject = [...partsObject, ...response];
     }
 
-    for (const part of parts) {
+    for (const part of partsObject) {
       setItems((prevItems) => [
         ...prevItems,
         { label: part.Name, key: part.ID },
