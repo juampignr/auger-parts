@@ -51,9 +51,10 @@ export const SearchInput = ({
 
         const response = (await parts.json())?.data;
 
+        console.log(parts);
+
         parts = [parts, ...response];
       }
-      console.log(parts);
     } else {
       console.log("### ASSOCIATIVE DATA SINGLE ###");
 
