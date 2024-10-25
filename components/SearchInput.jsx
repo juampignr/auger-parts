@@ -5,7 +5,13 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Context } from "/app/providers";
 import useAsyncEffect from "use-async-effect";
 
-export const SearchInput = ({ label, alias, nFields, placeholder }) => {
+export const SearchInput = ({
+  label,
+  alias,
+  nFields,
+  placeholder,
+  multipleRelations,
+}) => {
   const ctx = useContext(Context);
 
   const [items, setItems] = useState([]);
@@ -17,6 +23,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
   const field = useRef(alias ? alias : label ?? "");
   const fieldTable = useRef(ctx.table ?? "");
   const timeoutID = useRef(0);
+  const relations = useRef(multipleRelations);
 
   const fieldRow = ctx.row;
   const fieldsNumber = nFields;
@@ -28,6 +35,10 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
   }, []);
 
   useAsyncEffect(async () => {
+    console.log(
+      `${field.current.toUpperCase()} has multiple relations: ${multipleRelations}`,
+    );
+
     let parts = await fetch(
       `https://parts.auger.org.ar/api/associated/${field.current}`,
     );

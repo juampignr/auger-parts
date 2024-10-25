@@ -264,6 +264,7 @@ export default function Home() {
             nFields={metadata.length}
             label={`${element.column_name}`}
             alias={element.column_alias}
+            multipleRelations={Array.isArray(element.associated_table) ?? false}
           />
         );
       }
