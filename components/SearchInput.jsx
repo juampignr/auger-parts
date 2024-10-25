@@ -21,15 +21,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
   const fieldRow = ctx.row;
   const fieldsNumber = nFields;
 
-  useEffect(() => {
-    if (!ctx.valuesObject[fieldRow]) ctx.valuesObject[fieldRow] = {};
-
-    if (placeholder) setValuePlaceholder(placeholder);
-  }, []);
-
-  useAsyncEffect(async () => {
-    setItems([]);
-
+  const populate = async () => {
     let parts = await fetch(
       `https://parts.auger.org.ar/api/associated/${field.current}`,
     );
@@ -43,7 +35,15 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
         { label: part.Name, key: part.ID },
       ]);
     }
-  }, [isOpen]);
+
+    setIsOpen(true);
+  };
+
+  useEffect(() => {
+    if (!ctx.valuesObject[fieldRow]) ctx.valuesObject[fieldRow] = {};
+
+    if (placeholder) setValuePlaceholder(placeholder);
+  }, []);
 
   return (
     <div className="lg:w-1/6 md:w-1/4 sm:w-1/2 animate__animated animate__fadeInDown">
@@ -53,7 +53,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
         defaultItems={items}
         label={field.current}
         placeholder={valuePlaceholder ?? field.current}
-        //onOpenChange={(state, action) => isOpen ?? setIsOpen(true)}
+        onOpenChange={async (state, action) => isOpen ?? (await populate())}
         onSelectionChange={(key) => {
           let rowsValues = ctx.valuesObject[fieldRow];
 
