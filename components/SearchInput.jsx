@@ -28,12 +28,13 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
 
     parts = (await parts.json())?.data;
 
-    console.log(parts);
-    for (const part of parts) {
-      setItems((prevItems) => [
-        ...prevItems,
-        { label: part.Name, key: part.ID },
-      ]);
+    if (Array.isArray(parts)) {
+      for (const part of parts) {
+        setItems((prevItems) => [
+          ...prevItems,
+          { label: `${part.ID} (${part.name})`, key: part.ID },
+        ]);
+      }
     }
 
     setIsOpen(true);
