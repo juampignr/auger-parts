@@ -17,7 +17,6 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
   const field = useRef(alias ? alias : label ?? "");
   const fieldTable = useRef(ctx.table ?? "");
   const timeoutID = useRef(0);
-  const relations = useRef(multipleRelations);
 
   const fieldRow = ctx.row;
   const fieldsNumber = nFields;
