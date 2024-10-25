@@ -51,7 +51,7 @@ export const SearchInput = ({
 
         const response = (await parts.json())?.data;
 
-        console.log(parts);
+        console.log(response);
 
         parts = [parts, ...response];
       }
