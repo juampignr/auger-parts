@@ -32,7 +32,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
       for (const part of parts) {
         setItems((prevItems) => [
           ...prevItems,
-          { label: `${part.ID} (${part.name})`, key: part.ID },
+          { label: `${part.ID} (${part.Name})`, key: part.ID },
         ]);
       }
     }
