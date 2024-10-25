@@ -28,7 +28,7 @@ export async function GET(request, { params }) {
     }
 
     let [items, itemsMetadata] = await connection.query(
-      `select ${includedFields.replace(/,$/, "")} from ${table} where ID like '%${id}%' or Name like '%${id}%'`,
+      `select ${includedFields.replace(/,$/, "")} from ${table} where Name like '%${id}%'`,
     );
 
     await connection.end();
