@@ -61,9 +61,9 @@ export const SearchInput = ({
         `https://parts.auger.org.ar/api/associated/${field.current}`,
       );
       parts = (await parts.json())?.data;
-    }
 
-    console.log(parts);
+      console.log(parts);
+    }
 
     for (const part of parts) {
       setItems((prevItems) => [
