@@ -93,7 +93,7 @@ export async function POST(request, { params }) {
       let ids = "";
 
       for (const name of id.split(",")) {
-        ids += `${name},`;
+        ids += `"${name}",`;
       }
 
       console.log(
