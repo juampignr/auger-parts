@@ -78,14 +78,8 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
               for (const key in rowsValues) {
                 if (Object.hasOwnProperty.call(rowsValues, key)) {
                   let value = rowsValues[key];
-                  let template = 0;
 
-                  if (value.includes("#") && rowsValues["Avail"] > 1) {
-                    template = 1;
-                    console.log(`Template found on ${key}!: ${value}`);
-                  }
-
-                  formData.append(`${key}:${typeof value}:${template}`, value);
+                  formData.append(`${key}:${typeof value}:0`, value);
                 }
               }
 
