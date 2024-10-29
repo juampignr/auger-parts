@@ -196,10 +196,19 @@ export default function Home() {
     let ids = "";
 
     for (const id of Object.keys(ctx.valuesObject)) {
-      ids += ctx.valuesObject[id]["Name"];
+      ids += `${ctx.valuesObject[id]["Name"]},`;
     }
 
-    console.log(ids);
+    if (ids) {
+      let part = await fetch(
+        `https://parts.auger.org.ar/api/part/${selectedPart}/${ids}`,
+      );
+
+      parts = (await part.json())?.data;
+
+      console.log(parts);
+    }
+
     /*
     const id = ctx.valuesObject["1"]["Name"];
 

@@ -8,7 +8,7 @@ export async function GET(request, { params }) {
     console.log(params);
 
     const table = params?.table;
-    const id = params?.id;
+    const ids = params?.id;
 
     const connection = await mysql.createConnection({
       host: "db.auger.org.ar",
@@ -27,8 +27,12 @@ export async function GET(request, { params }) {
         includedFields += `${field.Field},`;
     }
 
+    console.log(
+      `select ${includedFields.replace(/,$/, "")} from ${table} where Name IN (${ids})`,
+    );
+
     let [items, itemsMetadata] = await connection.query(
-      `select ${includedFields.replace(/,$/, "")} from ${table} where Name like '%${id}%'`,
+      `select ${includedFields.replace(/,$/, "")} from ${table} where Name IN (${ids})`,
     );
 
     await connection.end();
