@@ -204,7 +204,7 @@ export default function Home() {
         `https://parts.auger.org.ar/api/part/${selectedPart}/${ids}`,
       );
 
-      result = (await part.json())?.data;
+      result = (await result.json())?.data;
 
       console.log(result);
     }
