@@ -217,9 +217,10 @@ export default function Home() {
           }
         }
       }
+
+      console.log(ctx.valuesObject);
     }
 
-    console.log(rawFields);
     /*
     const id = ctx.valuesObject["1"]["Name"];
 
