@@ -40,7 +40,8 @@ export async function GET(request, { params }) {
       `select ${includedFields.replace(/,$/, "")} from ${table} where Name IN (${ids.replace(/,$/, "")})`,
     );
 
-    console.log(items);
+    items[0]["Name"] = ids.replace(/,$/, "");
+
     await connection.end();
 
     return Response.json({ status: "ok", data: items });
