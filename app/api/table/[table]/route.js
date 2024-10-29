@@ -96,18 +96,13 @@ export async function POST(request, { params }) {
         ids += `"${name}",`;
       }
 
-      console.log(
+      let [result, metadata] = await connection.query(
         `update ${params.table} SET ${encodedUpdate.replace(/,\s*$/, "")} where Name IN (${ids.replace(/,$/, "")})`,
       );
-      /*
-      let [result, metadata] = await connection.query(
-        `update ${params.table} SET ${encodedUpdate.replace(/,\s*$/, "")} where Name = '${id}'`,
-      );
-      */
+
       console.log("### RESULT ###");
 
       console.log(result);
-      console.log(metadata);
     } else {
       if (Object.keys(templateFields).length) {
         for (let [i, n] = [0, parseInt(parsedData["Avail"])]; i < n; i++) {
