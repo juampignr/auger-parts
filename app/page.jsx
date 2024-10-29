@@ -201,7 +201,7 @@ export default function Home() {
       );
 
       part = (await part.json())?.data;
-      console.log(part[0]);
+      console.log(part);
 
       for (const index in rawFields) {
         const columnName = rawFields[index].column_name;
