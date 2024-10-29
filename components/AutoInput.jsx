@@ -46,15 +46,14 @@ export const AutoInput = ({
         label={`${fieldLabel}`}
         onChange={(event) => {
           console.log(`Testing ${event.target.value} against ${regex}`);
-          if (
-            !event.target.value.includes(",") &&
-            !fieldRegex.test(event.target.value)
-          ) {
-            setIsInvalid(true);
+          if (!fieldRegex.test(event.target.value)) {
+            if (!event.target.value.includes(",")) setIsInvalid(true);
           } else {
             let rowsValues = ctx.valuesObject[fieldRow];
 
-            rowsValues[label] = event.target.value;
+            rowsValues[label] = event.target.value.includes(",")
+              ? event.target.value.replace(" ", "")
+              : event.target.value;
 
             console.log(ctx);
 
