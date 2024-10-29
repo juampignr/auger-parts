@@ -193,35 +193,6 @@ export default function Home() {
   }
 
   async function handleSearchPart(event) {
-    let ids = "";
-
-    for (const id of Object.keys(ctx.valuesObject)) {
-      ids += `"${ctx.valuesObject[id]["Name"]}",`;
-    }
-
-    if (ids) {
-      let result = await fetch(
-        `https://parts.auger.org.ar/api/part/${selectedPart}/${ids}`,
-      );
-
-      result = (await result.json())?.data;
-
-      console.log(result);
-
-      for (const index in rawFields) {
-        const columnName = rawFields[index].column_name;
-
-        for (const res of result) {
-          if (Object.keys(res).includes(columnName)) {
-            rawFields[index]["default_value"] = res[columnName];
-          }
-        }
-      }
-
-      console.log(ctx.valuesObject);
-    }
-
-    /*
     const id = ctx.valuesObject["1"]["Name"];
 
     if (id) {
@@ -247,7 +218,6 @@ export default function Home() {
 
       populateFields(rawFields);
     }
-    */
   }
 
   async function handleSelection(event) {
