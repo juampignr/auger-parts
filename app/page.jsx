@@ -207,6 +207,16 @@ export default function Home() {
       result = (await result.json())?.data;
 
       console.log(result);
+
+      for (const index in rawFields) {
+        const columnName = rawFields[index].column_name;
+
+        for (const res of result) {
+          if (Object.keys(res).includes(columnName)) {
+            rawFields[index]["default_value"] = res[columnName];
+          }
+        }
+      }
     }
 
     console.log(rawFields);
