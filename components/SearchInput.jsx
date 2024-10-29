@@ -56,7 +56,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
         isRequired
         defaultItems={items}
         label={field.current}
-        placeholder={valuePlaceholder ?? field.current}
+        placeholder={valuePlaceholder}
         onOpenChange={async (state, action) => isOpen ?? (await populate())}
         onSelectionChange={(key) => {
           let rowsValues = ctx.valuesObject[fieldRow];
