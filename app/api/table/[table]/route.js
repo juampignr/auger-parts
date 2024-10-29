@@ -90,10 +90,20 @@ export async function POST(request, { params }) {
         encodedUpdate += `${key} = ${parsedData[key]}, `;
       }
 
+      let ids = "";
+
+      for (const name of id.split(",")) {
+        ids += `${name},`;
+      }
+
+      console.log(
+        `update ${params.table} SET ${encodedUpdate.replace(/,\s*$/, "")} where Name IN ('${ids.replace(/,$/, "")}')`,
+      );
+      /*
       let [result, metadata] = await connection.query(
         `update ${params.table} SET ${encodedUpdate.replace(/,\s*$/, "")} where Name = '${id}'`,
       );
-
+      */
       console.log("### RESULT ###");
 
       console.log(result);
