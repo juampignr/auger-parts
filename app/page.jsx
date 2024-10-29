@@ -193,7 +193,7 @@ export default function Home() {
   }
 
   async function handleSearchPart(event) {
-    const ids = "";
+    let ids = "";
 
     for (const id of ctx.valuesObject) {
       ids += ctx.valuesObject[id]["Name"];
