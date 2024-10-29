@@ -206,7 +206,11 @@ export default function Home() {
         const columnName = rawFields[index].column_name;
 
         if (Object.keys(part[0]).includes(columnName)) {
-          rawFields[index]["default_value"] = part[0][columnName];
+          if (columnName === "Status" && !part[0][columnName]) {
+            rawFields[index]["default_value"] = 1;
+          } else {
+            rawFields[index]["default_value"] = part[0][columnName];
+          }
         }
       }
 
