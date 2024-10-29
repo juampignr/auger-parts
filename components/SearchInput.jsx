@@ -64,8 +64,13 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
           rowsValues[label] = parseInt(key.split(":")[0]);
           console.log(rowsValues[label]);
 
-          if (Object.values(rowsValues).length === fieldsNumber) {
+          if (
+            Object.values(rowsValues).length === fieldsNumber ||
+            valuePlaceholder
+          ) {
             clearTimeout(timeoutID.current);
+
+            if (valuePlaceholder) rowsValues["Update"] = "true";
 
             timeoutID.current = setTimeout(async () => {
               const formData = new FormData();
