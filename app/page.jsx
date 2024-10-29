@@ -196,7 +196,7 @@ export default function Home() {
     const ids = "";
 
     for (const id of ctx.valuesObject) {
-      id += ctx.valuesObject[id]["Name"];
+      ids += ctx.valuesObject[id]["Name"];
     }
 
     console.log(ids);
