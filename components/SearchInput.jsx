@@ -32,7 +32,10 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
       for (const part of parts) {
         setItems((prevItems) => [
           ...prevItems,
-          { label: `${part.Name} (${part.ID})`, key: part.ID },
+          {
+            label: `${part.Name}: ${part.ID}`,
+            key: `${part.ID}:${part.Name}`,
+          },
         ]);
       }
     }
@@ -58,8 +61,8 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
         onSelectionChange={(key) => {
           let rowsValues = ctx.valuesObject[fieldRow];
 
-          rowsValues[label] = key;
-          console.log(ctx);
+          rowsValues[label] = parseInt(key.split(":")[0]);
+          console.log(rowsValues[label]);
 
           if (Object.values(rowsValues).length === fieldsNumber) {
             clearTimeout(timeoutID.current);
