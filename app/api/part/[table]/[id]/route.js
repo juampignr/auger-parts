@@ -33,7 +33,7 @@ export async function GET(request, { params }) {
     }
 
     console.log(
-      `select ${includedFields.replace(/,$/, "")} from ${table} where Name IN (${ids.replace(/$,/, "")})`,
+      `select ${includedFields.replace(/,$/, "")} from ${table} where Name IN (${ids.replace(/,$/, "")})`,
     );
 
     let [items, itemsMetadata] = await connection.query(
