@@ -95,7 +95,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
               );
 
               setFieldColor("success");
-              setFieldLabel("Parte ingresada!");
+              field.current = "Parte ingresada!";
             }, 10000);
           }
         }}
