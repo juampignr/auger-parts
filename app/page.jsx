@@ -195,7 +195,7 @@ export default function Home() {
   async function handleSearchPart(event) {
     let ids = "";
 
-    for (const id of ctx.valuesObject) {
+    for (const id of Object.keys(ctx.valuesObject)) {
       ids += ctx.valuesObject[id]["Name"];
     }
 
