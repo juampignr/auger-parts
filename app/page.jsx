@@ -193,7 +193,15 @@ export default function Home() {
   }
 
   async function handleSearchPart(event) {
-    const id = ctx.valuesObject["1"]["ID"] ?? ctx.valuesObject["1"]["Name"];
+    const ids = "";
+
+    for (const id of ctx.valuesObject) {
+      id += ctx.valuesObject[id]["Name"];
+    }
+
+    console.log(ids);
+    /*
+    const id = ctx.valuesObject["1"]["Name"];
 
     if (id) {
       let part = await fetch(
@@ -218,6 +226,7 @@ export default function Home() {
 
       populateFields(rawFields);
     }
+    */
   }
 
   async function handleSelection(event) {
