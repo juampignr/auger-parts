@@ -196,7 +196,7 @@ export default function Home() {
     let ids = "";
 
     for (const id of Object.keys(ctx.valuesObject)) {
-      ids += `${ctx.valuesObject[id]["Name"]},`;
+      ids += `"${ctx.valuesObject[id]["Name"]}",`;
     }
 
     if (ids) {
