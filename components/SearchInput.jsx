@@ -91,7 +91,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
 
               //Make Miguel responsible for all muahahaha
               formData.append("UserID:string:0", 39);
-
+              console.log(formData);
               const postResult = await fetch(
                 `https://parts.auger.org.ar/api/table/${fieldTable.current}`,
                 {
