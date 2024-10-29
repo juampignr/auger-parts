@@ -97,7 +97,7 @@ export async function POST(request, { params }) {
       }
 
       console.log(
-        `update ${params.table} SET ${encodedUpdate.replace(/,\s*$/, "")} where Name IN ('${ids.replace(/,$/, "")}')`,
+        `update ${params.table} SET ${encodedUpdate.replace(/,\s*$/, "")} where Name IN (${ids.replace(/,$/, "")})`,
       );
       /*
       let [result, metadata] = await connection.query(
