@@ -209,6 +209,7 @@ export default function Home() {
       console.log(result);
     }
 
+    console.log(rawFields);
     /*
     const id = ctx.valuesObject["1"]["Name"];
 
