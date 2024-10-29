@@ -200,13 +200,13 @@ export default function Home() {
     }
 
     if (ids) {
-      let part = await fetch(
+      let result = await fetch(
         `https://parts.auger.org.ar/api/part/${selectedPart}/${ids}`,
       );
 
-      parts = (await part.json())?.data;
+      result = (await part.json())?.data;
 
-      console.log(parts);
+      console.log(result);
     }
 
     /*
