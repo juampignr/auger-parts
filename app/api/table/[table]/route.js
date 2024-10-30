@@ -75,6 +75,8 @@ export async function POST(request, { params }) {
       }
     }
 
+    console.log(`Is update: ${update}`);
+
     if (update) {
       let encodedUpdate = "";
 
@@ -94,6 +96,11 @@ export async function POST(request, { params }) {
     } else {
       const nameField = data["Name:string:0"];
 
+      console.log(
+        nameField.includes(",")
+          ? console.log(nameField.split(","))
+          : console.log(nameField),
+      );
       if (nameField.includes(",")) {
         for (const name of nameField.split(",")) {
           console.log(
