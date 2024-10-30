@@ -20,13 +20,17 @@ export async function GET(request, { params }) {
         `select ID,Name from Status union select ID,Name from SPStatus union select ID,Name from EkitStatus union select ID,Name from WaterBottleStatus union select ID,Name from SSDCoverStatus union select ID,Name from RadioStatus union select ID,Name from TestStatus union select ID,Name from SPMTStatus`,
       );
     } else {
-      [fields, metadata] = await connection.query(
-        `SELECT ID,Name FROM ${params.field}`,
+      const [describedFields, describedMetadata] = await connection.query(
+        `describe ${params.field}`,
+      );
+
+      console.log(describedFields);[(fields, metadata)] = await connection.query(
+        `select ID,Name FROM ${params.field}`,
       );
 
       if (!fields.length) {
         let [fields, metadata] = await connection.query(
-          `SELECT ID,Name FROM ${params.field}Type`,
+          `select ID,Name FROM ${params.field}Type where Avail=1`,
         );
       }
     }
