@@ -46,8 +46,11 @@ export const AutoInput = ({
         label={`${fieldLabel}`}
         onChange={(event) => {
           console.log(`Testing ${event.target.value} against ${regex}`);
-          if (!fieldRegex.test(event.target.value)) {
-            if (!event.target.value.includes(",")) setIsInvalid(true);
+          if (
+            !fieldRegex.test(event.target.value) &&
+            !event.target.value.includes(",")
+          ) {
+            setIsInvalid(true);
           } else {
             let rowsValues = ctx.valuesObject[fieldRow];
 
