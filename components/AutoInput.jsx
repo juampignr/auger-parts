@@ -73,16 +73,9 @@ export const AutoInput = ({
                 for (const key in rowsValues) {
                   if (Object.hasOwnProperty.call(rowsValues, key)) {
                     let value = rowsValues[key];
-                    let template = 0;
 
-                    if (value.includes("#") && rowsValues["Avail"] > 1) {
-                      template = 1;
-                    }
-
-                    formData.append(
-                      `${key}:${typeof value}:${template}`,
-                      value,
-                    );
+                    //Remove templates later
+                    formData.append(`${key}:${typeof value}:0`, value);
                   }
                 }
 

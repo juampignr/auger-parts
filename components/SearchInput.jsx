@@ -82,6 +82,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
                 if (Object.hasOwnProperty.call(rowsValues, key)) {
                   let value = rowsValues[key];
 
+                  //Remove templates later
                   formData.append(`${key}:${typeof value}:0`, value);
                 }
               }
