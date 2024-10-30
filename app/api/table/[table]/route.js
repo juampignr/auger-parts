@@ -92,18 +92,19 @@ export async function POST(request, { params }) {
         `update ${params.table} SET ${encodedUpdate.replace(/,\s*$/, "")} where Name IN (${ids.replace(/,$/, "")})`,
       );
     } else {
-      if (Object.keys(templateFields).length) {
-        for (let [i, n] = [0, parseInt(parsedData["Avail"])]; i < n; i++) {
-          for (const key in templateFields) {
-            if (Object.hasOwnProperty.call(templateFields, key)) {
-              const value = templateFields[key].replace("#", i);
-              parsedData[key] = value;
-            }
-          }
+      const nameField = data["Name:string:0"];
 
-          let [result, metadata] = await connection.query(
-            `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+      if (nameField.includes(",")) {
+        for (const name of nameField.split(",")) {
+          console.log(
+            `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})``insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
           );
+
+          /*
+          let [result, metadata] = await connection.query(
+            `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})``insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+          );
+          */
         }
       } else {
         let [result, metadata] = await connection.query(
