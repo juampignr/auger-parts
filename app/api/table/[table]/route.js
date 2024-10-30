@@ -47,8 +47,6 @@ export async function POST(request, { params }) {
       delete data["Update:string:0"];
     }
 
-    console.log(`Update operation: ${update}`);
-
     const connection = await mysql.createConnection({
       host: "db.auger.org.ar",
       user: "PMS",
@@ -56,14 +54,10 @@ export async function POST(request, { params }) {
       database: "PMS",
     });
 
-    console.log(data);
-
     for (const key in data) {
       if (Object.hasOwnProperty.call(data, key)) {
         const [name, type, template] = key.split(":");
-        console.log(name);
         const element = data[key];
-        console.log(element);
 
         if (parseInt(template)) {
           templateFields[name] = data[key];
@@ -81,8 +75,6 @@ export async function POST(request, { params }) {
       }
     }
 
-    console.log(parsedData);
-
     if (update) {
       let encodedUpdate = "";
 
@@ -99,10 +91,6 @@ export async function POST(request, { params }) {
       let [result, metadata] = await connection.query(
         `update ${params.table} SET ${encodedUpdate.replace(/,\s*$/, "")} where Name IN (${ids.replace(/,$/, "")})`,
       );
-
-      console.log("### RESULT ###");
-
-      console.log(result);
     } else {
       if (Object.keys(templateFields).length) {
         for (let [i, n] = [0, parseInt(parsedData["Avail"])]; i < n; i++) {
@@ -113,30 +101,14 @@ export async function POST(request, { params }) {
             }
           }
 
-          console.log(
-            `Inserting one by one: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
-          );
           let [result, metadata] = await connection.query(
             `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
           );
-
-          console.log("### RESULT ###");
-
-          console.log(result);
-          console.log(metadata);
         }
       } else {
-        console.log(
-          `Inserting all at once: insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
-        );
         let [result, metadata] = await connection.query(
           `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
         );
-
-        console.log("### RESULT ###");
-
-        console.log(result);
-        console.log(metadata);
       }
     }
     await connection.end();

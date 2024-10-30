@@ -61,8 +61,11 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
         onSelectionChange={(key) => {
           let rowsValues = ctx.valuesObject[fieldRow];
 
-          rowsValues[label] = parseInt(key.split(":")[0]);
-          console.log(rowsValues[label]);
+          rowsValues[label] = parseInt(key?.split(":")[0]);
+
+          console.log(
+            `Filled ${Object.values(rowsValues).length} from ${nFields}`,
+          );
 
           if (
             Object.values(rowsValues).length === fieldsNumber ||
@@ -85,7 +88,7 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
 
               //Make Miguel responsible for all muahahaha
               formData.append("UserID:string:0", 39);
-              console.log(formData);
+
               const postResult = await fetch(
                 `https://parts.auger.org.ar/api/table/${fieldTable.current}`,
                 {

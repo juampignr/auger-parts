@@ -95,10 +95,6 @@ export default function Home() {
 
   const parentRef = useRef(false);
 
-  const particlesLoaded = (container) => {
-    console.log(container);
-  };
-
   const particleOptions = useMemo(
     () => ({
       background: {
@@ -297,12 +293,9 @@ export default function Home() {
   }
 
   useAsyncEffect(async () => {
-    console.log(ctx);
-
     let parts = await fetch("https://parts.auger.org.ar/api/parts/");
     parts = (await parts.json())?.data;
 
-    console.log(parts);
     if (parts)
       setParts(
         parts.map((element) => {
@@ -318,18 +311,12 @@ export default function Home() {
   }, []);
 
   useAsyncEffect(async () => {
-    console.log(selectedPart);
-
     if (selectedPart) {
       let metadata = await fetch(
         `https://parts.auger.org.ar/api/table/${selectedPart}`,
       );
 
-      console.log(metadata);
-
       metadata = (await metadata.json())?.data;
-
-      console.log(metadata);
 
       //valuesObject.current = {}
       //setrowCounter(0);
@@ -349,7 +336,7 @@ export default function Home() {
       {particlesInit ? (
         <Particles
           id="tsparticles"
-          particlesLoaded={particlesLoaded}
+          //particlesLoaded={particlesLoaded}
           options={particleOptions}
         />
       ) : (
@@ -373,10 +360,8 @@ export default function Home() {
             placeholder="Qué componente o parte desea agregar?"
             className="max-w-lg"
             onSelectionChange={(change) => {
-              console.log(Object.values(change)[0]);
               setSelectedPart(Object.values(change)[0]);
               ctx.table = Object.values(change)[0];
-              console.log(selectedPart);
             }}
           >
             {(parts) => <SelectItem>{parts.label}</SelectItem>}

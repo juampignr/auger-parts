@@ -55,11 +55,10 @@ export const AutoInput = ({
               ? event.target.value.replace(" ", "")
               : event.target.value;
 
-            console.log(ctx);
-
             console.log(
-              `Filled ${Object.values(rowsValues).length} out of ${fieldsNumber})`,
+              `Filled ${Object.values(rowsValues).length} from ${nFields}`,
             );
+
             if (
               Object.values(rowsValues).length === fieldsNumber ||
               valuePlaceholder
@@ -75,10 +74,9 @@ export const AutoInput = ({
                   if (Object.hasOwnProperty.call(rowsValues, key)) {
                     let value = rowsValues[key];
                     let template = 0;
-                    console.log(rowsValues["Avail"]);
+
                     if (value.includes("#") && rowsValues["Avail"] > 1) {
                       template = 1;
-                      console.log(`Template found on ${key}!: ${value}`);
                     }
 
                     formData.append(

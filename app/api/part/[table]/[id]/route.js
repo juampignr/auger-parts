@@ -5,8 +5,6 @@ export const dynamic = "force-dynamic"; // defaults to auto
 
 export async function GET(request, { params }) {
   try {
-    console.log(params);
-
     const table = params?.table;
     const id = params?.id;
     let ids = "";
@@ -32,17 +30,11 @@ export async function GET(request, { params }) {
       ids += `"${name}",`;
     }
 
-    console.log(
-      `select ${includedFields.replace(/,$/, "")} from ${table} where Name IN (${ids.replace(/,$/, "")})`,
-    );
-
     let [items, itemsMetadata] = await connection.query(
       `select ${includedFields.replace(/,$/, "")} from ${table} where Name IN (${ids.replace(/,$/, "")})`,
     );
 
     items[0]["Name"] = ids.replace(/,$/, "");
-
-    console.log(items[0]);
 
     await connection.end();
 
