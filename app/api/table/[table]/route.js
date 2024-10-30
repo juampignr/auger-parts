@@ -107,7 +107,8 @@ export async function POST(request, { params }) {
 
       if (nameField.includes(",")) {
         for (const name of nameField.split(",")) {
-          console.log(name);
+          parsedData["Name"] = `'${name}'`;
+
           console.log(
             `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
           );
