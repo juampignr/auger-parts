@@ -12,16 +12,20 @@ export async function GET(request, { params }) {
       database: "PMS",
     });
 
+    let fields;
+    let metadata;
+
     if (params.field === "Status") {
-      let [fields, metadata] = await connection.query(
+      [fields, metadata] = await connection.query(
         `select ID,Name from Status union select ID,Name from SPStatus union select ID,Name from EkitStatus union select ID,Name from WaterBottleStatus union select ID,Name from SSDCoverStatus union select ID,Name from RadioStatus union select ID,Name from TestStatus union select ID,Name from SPMTStatus`,
       );
     } else {
-      let [describedFields, describedMetadata] = await connection.query(
+      const [describedFields, describedMetadata] = await connection.query(
         `describe ${params.field}`,
       );
 
-      let [fields, metadata] = await connection.query(
+      console.log(describedFields);
+      [fields, metadata] = await connection.query(
         `select ID,Name FROM ${params.field}`,
       );
 
