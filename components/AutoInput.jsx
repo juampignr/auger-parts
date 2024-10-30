@@ -51,6 +51,8 @@ export const AutoInput = ({
           } else {
             let rowsValues = ctx.valuesObject[fieldRow];
 
+            console.log(rowsValues);
+
             rowsValues[label] = event.target.value.includes(",")
               ? event.target.value.replace(" ", "")
               : event.target.value;

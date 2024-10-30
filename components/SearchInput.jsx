@@ -61,6 +61,8 @@ export const SearchInput = ({ label, alias, nFields, placeholder }) => {
         onSelectionChange={(key) => {
           let rowsValues = ctx.valuesObject[fieldRow];
 
+          console.log(rowsValues);
+
           rowsValues[label] = parseInt(key?.split(":")[0]);
 
           console.log(
