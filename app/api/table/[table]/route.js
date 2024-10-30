@@ -102,13 +102,14 @@ export async function POST(request, { params }) {
           : console.log(nameField),
       );
 
-      console.log(parsedData);
+      console.log("Heres the error");
+      console.log(Object.keys(parsedData).join(", "));
 
       if (nameField.includes(",")) {
         for (const name of nameField.split(",")) {
           console.log(name);
           console.log(
-            `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})``insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
+            `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
           );
 
           /*
