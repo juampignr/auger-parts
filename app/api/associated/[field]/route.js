@@ -14,6 +14,7 @@ export async function GET(request, { params }) {
 
     let fields;
     let metadata;
+    let component;
 
     if (params.field === "Status") {
       [fields, metadata] = await connection.query(
@@ -24,7 +25,13 @@ export async function GET(request, { params }) {
         `describe ${params.field}`,
       );
 
-      console.log(describedFields);
+      for (const describedField of describedFields) {
+        if (describedField.Field === "Avail") {
+          component = true;
+        }
+      }
+      console.log(component);
+
       [fields, metadata] = await connection.query(
         `select ID,Name FROM ${params.field}`,
       );
