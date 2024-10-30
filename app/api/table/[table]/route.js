@@ -102,22 +102,13 @@ export async function POST(request, { params }) {
           : console.log(nameField),
       );
 
-      console.log("Heres the error");
-      console.log(Object.keys(parsedData).join(", "));
-
       if (nameField.includes(",")) {
         for (const name of nameField.split(",")) {
           parsedData["Name"] = `'${name}'`;
 
-          console.log(
-            `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
-          );
-
-          /*
           let [result, metadata] = await connection.query(
             `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})``insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
           );
-          */
         }
       } else {
         let [result, metadata] = await connection.query(
