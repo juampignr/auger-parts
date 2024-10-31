@@ -15,7 +15,7 @@ export async function GET(request, { params }) {
     let fields;
     let metadata;
     let component;
-    let selectQuery = `select ID,Name FROM ${params.field}`;
+    let selectQuery = `select ID,Name FROM ${params.field.replace(/\d*/g, "")}`;
 
     if (params.field === "Status") {
       [fields, metadata] = await connection.query(
@@ -32,7 +32,7 @@ export async function GET(request, { params }) {
         }
       }
 
-      if (component)
+      if (component && params.field !== "Detector")
         selectQuery = `select ID,Name FROM ${params.field} where Avail=1`;
 
       console.log(component);
@@ -40,7 +40,9 @@ export async function GET(request, { params }) {
       [fields, metadata] = await connection.query(selectQuery);
 
       if (!fields.length) {
-        let [fields, metadata] = await connection.query(selectQuery);
+        let [fields, metadata] = await connection.query(
+          `select ID,Name FROM ${params.field}Type where Avail=1`,
+        );
       }
     }
 
