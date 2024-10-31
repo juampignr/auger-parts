@@ -27,53 +27,53 @@ export async function GET(request, { params }) {
 }
 
 export async function POST(request, { params }) {
-  try {
-    let data = await request.formData();
-    data = Object.fromEntries(data.entries());
+  let data = await request.formData();
+  data = Object.fromEntries(data.entries());
 
-    let parsedData = {};
-    let templateFields = {};
-    let oneByOne = false;
-    let update = false;
-    let id;
+  let parsedData = {};
+  let templateFields = {};
+  let oneByOne = false;
+  let update = false;
+  let id;
 
-    if (data["Update:string:0"]) {
-      update = true;
+  if (data["Update:string:0"]) {
+    update = true;
 
-      id = data["ID:string:0"];
+    id = data["ID:string:0"];
 
-      delete data["ID:string:0"];
-      delete data["Name:string:0"];
-      delete data["Update:string:0"];
+    delete data["ID:string:0"];
+    delete data["Name:string:0"];
+    delete data["Update:string:0"];
+  }
+
+  for (const key in data) {
+    if (Object.hasOwnProperty.call(data, key)) {
+      const [name, type, template] = key.split(":");
+      const element = data[key];
+
+      if (parseInt(template)) {
+        templateFields[name] = data[key];
+      }
+
+      if (type === "string") {
+        if (isNaN(element)) {
+          parsedData[name] = `'${element}'`;
+        } else {
+          parsedData[name] = parseInt(element);
+        }
+      } else {
+        parsedData[name] = element;
+      }
     }
+  }
 
+  try {
     const connection = await mysql.createConnection({
       host: "db.auger.org.ar",
       user: "PMS",
       password: "Mi:kARgwpb",
       database: "PMS",
     });
-
-    for (const key in data) {
-      if (Object.hasOwnProperty.call(data, key)) {
-        const [name, type, template] = key.split(":");
-        const element = data[key];
-
-        if (parseInt(template)) {
-          templateFields[name] = data[key];
-        }
-
-        if (type === "string") {
-          if (isNaN(element)) {
-            parsedData[name] = `'${element}'`;
-          } else {
-            parsedData[name] = parseInt(element);
-          }
-        } else {
-          parsedData[name] = element;
-        }
-      }
-    }
 
     if (update) {
       let encodedUpdate = "";
@@ -94,20 +94,19 @@ export async function POST(request, { params }) {
     } else {
       const nameField = data["Name:string:0"];
 
+      const insertStatement = `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`;
+      //const insertHistoryStatement = `insert into zHis_${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`;
+
       if (nameField.includes(",")) {
         for (const name of nameField.split(",")) {
           parsedData["Name"] = `'${name}'`;
 
-          let [result, metadata] = await connection.query(
-            `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
-          );
+          let [result, metadata] = await connection.query(insertStatement);
         }
       } else {
-        let [result, metadata] = await connection.query(
-          `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`,
-        );
+        let [result, metadata] = await connection.query(insertStatement);
 
-        console.log(result);
+        console.log(Object.keys(result));
         console.log(metadata);
       }
     }
