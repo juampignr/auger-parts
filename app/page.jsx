@@ -198,7 +198,7 @@ export default function Home() {
 
       part = (await part.json())?.data;
 
-      if (part.length) {
+      if (part) {
         for (const index in rawFields) {
           const columnName = rawFields[index].column_name;
 
