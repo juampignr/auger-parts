@@ -36,6 +36,7 @@ export async function GET(request, { params }) {
 
     items[0]["Name"] = ids.replace(/,$/, "");
 
+    console.log(items);
     await connection.end();
 
     return Response.json({ status: "ok", data: items });
