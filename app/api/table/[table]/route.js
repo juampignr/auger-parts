@@ -91,6 +91,9 @@ export async function POST(request, { params }) {
       let [result, metadata] = await connection.query(
         `update ${params.table} SET ${encodedUpdate.replace(/,\s*$/, "")} where Name IN (${ids.replace(/,$/, "")})`,
       );
+      await connection.query(
+        `insert into zHis_${params.table}(ID, ${Object.keys(parsedData).join(", ")}) values (${result.insertId}, ${Object.values(parsedData).join(", ")})`,
+      );
     } else {
       const nameField = data["Name:string:0"];
 
@@ -101,12 +104,16 @@ export async function POST(request, { params }) {
           parsedData["Name"] = `'${name}'`;
 
           let [result, metadata] = await connection.query(insertStatement);
+          await connection.query(
+            `insert into zHis_${params.table}(ID, ${Object.keys(parsedData).join(", ")}) values (${result.insertId}, ${Object.values(parsedData).join(", ")})`,
+          );
         }
       } else {
         let [result, metadata] = await connection.query(insertStatement);
 
-        const insertHistoryStatement = `insert into zHis_${params.table}(ID,${Object.keys(parsedData).join(", ")}) values (${result.insertId},${Object.values(parsedData).join(", ")})`;
-        console.log(insertHistoryStatement);
+        await connection.query(
+          `insert into zHis_${params.table}(ID, ${Object.keys(parsedData).join(", ")}) values (${result.insertId}, ${Object.values(parsedData).join(", ")})`,
+        );
       }
     }
     await connection.end();
