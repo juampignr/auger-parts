@@ -5,11 +5,12 @@ export const dynamic = "force-dynamic"; // defaults to auto
 
 export async function GET(request, { params }) {
   try {
-    const connection = await mysql.createConnection({
+    const connection = mysql.createPool({
       host: "db.auger.org.ar",
       user: "mocca",
       password: "sibyll",
       database: "PMS",
+      connectionLimit: 150,
     });
 
     let statusTables = [];
