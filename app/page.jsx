@@ -198,24 +198,26 @@ export default function Home() {
 
       part = (await part.json())?.data;
 
-      for (const index in rawFields) {
-        const columnName = rawFields[index].column_name;
+      if (part.length) {
+        for (const index in rawFields) {
+          const columnName = rawFields[index].column_name;
 
-        if (Object.keys(part[0]).includes(columnName)) {
-          if (columnName === "Status" && !part[0][columnName]) {
-            rawFields[index]["default_value"] = 1;
-          } else {
-            rawFields[index]["default_value"] = part[0][columnName];
+          if (Object.keys(part[0]).includes(columnName)) {
+            if (columnName === "Status" && !part[0][columnName]) {
+              rawFields[index]["default_value"] = 1;
+            } else {
+              rawFields[index]["default_value"] = part[0][columnName];
+            }
           }
         }
+
+        setRowCounter(1);
+        ctx.row = 1;
+        setFields([]);
+        ctx.valuesObject = { 1: { ID: id } };
+
+        populateFields(rawFields);
       }
-
-      setRowCounter(1);
-      ctx.row = 1;
-      setFields([]);
-      ctx.valuesObject = { 1: { ID: id } };
-
-      populateFields(rawFields);
     }
   }
 
