@@ -9,11 +9,12 @@ export async function GET(request, { params }) {
     const id = params?.id;
     let ids = "";
 
-    const connection = await mysql.createConnection({
+    const connection = mysql.createPool({
       host: "db.auger.org.ar",
       user: "mocca",
       password: "sibyll",
       database: "PMS",
+      connectionLimit: 150,
     });
 
     let includedFields = "";
