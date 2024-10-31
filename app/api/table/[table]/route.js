@@ -35,6 +35,8 @@ export async function POST(request, { params }) {
   let oneByOne = false;
   let update = false;
   let id;
+  let result;
+  let metadata;
 
   if (data["Update:string:0"]) {
     update = true;
@@ -88,11 +90,8 @@ export async function POST(request, { params }) {
         ids += `"${name}",`;
       }
 
-      let [result, metadata] = await connection.query(
+      [result, metadata] = await connection.query(
         `update ${params.table} SET ${encodedUpdate.replace(/,\s*$/, "")} where Name IN (${ids.replace(/,$/, "")})`,
-      );
-      await connection.query(
-        `insert into zHis_${params.table}(ID, ${Object.keys(parsedData).join(", ")}) values (${result.insertId}, ${Object.values(parsedData).join(", ")})`,
       );
     } else {
       const nameField = data["Name:string:0"];
@@ -103,19 +102,17 @@ export async function POST(request, { params }) {
         for (const name of nameField.split(",")) {
           parsedData["Name"] = `'${name}'`;
 
-          let [result, metadata] = await connection.query(insertStatement);
-          await connection.query(
-            `insert into zHis_${params.table}(ID, ${Object.keys(parsedData).join(", ")}) values (${result.insertId}, ${Object.values(parsedData).join(", ")})`,
-          );
+          [result, metadata] = await connection.query(insertStatement);
         }
       } else {
-        let [result, metadata] = await connection.query(insertStatement);
-
-        await connection.query(
-          `insert into zHis_${params.table}(ID, ${Object.keys(parsedData).join(", ")}) values (${result.insertId}, ${Object.values(parsedData).join(", ")})`,
-        );
+        [result, metadata] = await connection.query(insertStatement);
       }
     }
+
+    await connection.query(
+      `insert into zHis_${params.table}(ID, ${Object.keys(parsedData).join(", ")}) values (${result.insertId}, ${Object.values(parsedData).join(", ")})`,
+    );
+
     await connection.end();
 
     return Response.json({ status: "ok", data: "changeme" });
