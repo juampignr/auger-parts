@@ -95,9 +95,6 @@ export async function POST(request, { params }) {
       const nameField = data["Name:string:0"];
 
       const insertStatement = `insert into ${params.table}(${Object.keys(parsedData).join(", ")}) values (${Object.values(parsedData).join(", ")})`;
-      const insertHistoryStatement = `insert into zHis_${params.table}(ID,${Object.keys(parsedData).join(", ")}) values (${result.insertId},${Object.values(parsedData).join(", ")})`;
-
-      console.log(insertHistoryStatement);
 
       if (nameField.includes(",")) {
         for (const name of nameField.split(",")) {
@@ -107,6 +104,9 @@ export async function POST(request, { params }) {
         }
       } else {
         let [result, metadata] = await connection.query(insertStatement);
+
+        const insertHistoryStatement = `insert into zHis_${params.table}(ID,${Object.keys(parsedData).join(", ")}) values (${result.insertId},${Object.values(parsedData).join(", ")})`;
+        console.log(insertHistoryStatement);
       }
     }
     await connection.end();
